@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import br.com.ufabc.poo_gestao_de_estoque.servico.CrudCompraService;
 import br.com.ufabc.poo_gestao_de_estoque.servico.CrudProdutoService;
+import br.com.ufabc.poo_gestao_de_estoque.servico.CrudVendaService;
 
 
 
@@ -16,12 +17,14 @@ public class PooGestaoDeEstoqueApplication implements CommandLineRunner{
 
 	private CrudProdutoService produtoService;
 	private CrudCompraService compraService;
+	private CrudVendaService vendaService;
 	
 	
 	
-	public PooGestaoDeEstoqueApplication(CrudProdutoService produtoService , CrudCompraService compraService) {
+	public PooGestaoDeEstoqueApplication(CrudProdutoService produtoService , CrudCompraService compraService, CrudVendaService vendaService) {
 		this.produtoService=produtoService;
 		this.compraService=compraService;
+		this.vendaService=vendaService;
 	}
 	public static void main(String[] args) {
 		SpringApplication.run(PooGestaoDeEstoqueApplication.class, args);
@@ -48,6 +51,9 @@ public class PooGestaoDeEstoqueApplication implements CommandLineRunner{
 				break;
 			case 2:
 				this.compraService.menu(scanner);
+				break;
+			case 3:
+				this.vendaService.menu(scanner);
 				break;
 			default:
 				gatilho=false;

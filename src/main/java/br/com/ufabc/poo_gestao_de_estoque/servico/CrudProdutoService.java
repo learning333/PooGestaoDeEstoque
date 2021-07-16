@@ -117,7 +117,7 @@ public class CrudProdutoService {
 			ProdutoCadastrado produto = optional.get();
 			Long id2 =produto.getId();
 			this.produtoRepository.deleteById(id2);
-			System.out.println("produto deletado\n");
+			System.out.println("produto deletado \n");
 		}else {
 			System.out.println("Id invalido");
 		}

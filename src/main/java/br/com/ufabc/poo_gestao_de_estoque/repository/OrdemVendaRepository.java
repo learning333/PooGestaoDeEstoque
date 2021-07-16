@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import br.com.ufabc.poo_gestao_de_estoque.modelo.Venda;
 
 
-//@Repository
-public interface OrdemVendaRepository {//extends CrudRepository<Venda, Long>{
+@Repository
+public interface OrdemVendaRepository extends CrudRepository<Venda, Long>{
 
 }
