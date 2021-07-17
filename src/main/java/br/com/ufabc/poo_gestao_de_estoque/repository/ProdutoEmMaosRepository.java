@@ -19,4 +19,9 @@ public interface ProdutoEmMaosRepository extends CrudRepository<ProdutoEmMaos,Lo
 	
 	@Query(value="SELECT * FROM produto_em_maos where nome= :nome ORDER BY id DESC LIMIT 0,1", nativeQuery = true)
 	Optional<ProdutoEmMaos> findProducto(@Param("nome") String nome);
+	
+	@Query(
+			  value = "SELECT * FROM produto_em_maos where pedido_original= :lote and nome= :nome ORDER BY id DESC LIMIT 0,1", 
+			  nativeQuery = true)
+	Optional<ProdutoEmMaos> findByLoteAndProduto(@Param("lote") String lote,@Param("nome") String nome);
 }

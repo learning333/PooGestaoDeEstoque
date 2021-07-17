@@ -29,17 +29,19 @@ public class CrudVendaService {
 	private OrdemCompraRepository compraRepository;
 	private ProdutoVendaRepository produtoVendaRepository;
 	private ProdutoEmMaosRepository produtoEmMaosRepository;
+	private ProdutoCompraRepository produtoCompraRepository;
 	private List<ProdutoVenda> lista;
 	
 	
 	public CrudVendaService(OrdemVendaRepository vendaRepository, OrdemCompraRepository compraRepository,
 			ProdutoVendaRepository produtoVendaRepository, ProdutoEmMaosRepository produtoEmMaosRepository,
-			List<ProdutoVenda> lista) {
+			List<ProdutoVenda> lista,ProdutoCompraRepository produtoCompraRepository) {
 		super();
 		this.vendaRepository = vendaRepository;
 		this.compraRepository = compraRepository;
 		this.produtoVendaRepository = produtoVendaRepository;
 		this.produtoEmMaosRepository = produtoEmMaosRepository;
+		this.produtoCompraRepository = produtoCompraRepository;
 		this.lista = lista;
 	}
 	
@@ -63,7 +65,7 @@ public class CrudVendaService {
 				this.visualizar(scanner);
 				break;
 			case 3:
-				//this.devolucao(scanner);
+				this.devolucao(scanner);
 				break;
 			case 4:
 				//this.recebimento(scanner);
@@ -177,48 +179,57 @@ public class CrudVendaService {
 	        	
 			}
 		}
-		
-		
-
-
-
 	}
-	/*
-	private void deletar(Scanner scanner) {
-		System.out.print("Digite o id do pedido de compra: ");
+	private void devolucao(Scanner scanner) {
+		System.out.print("Digite o id da venda: ");
 		Long id=scanner.nextLong();
-		Optional<Compra> optional = this.compraRepository.findById(id);
-		if(optional.isPresent()) {
-			Compra compra = optional.get();
-			Long id2 =compra.getId();
-			
-			List<ProdutoComprado> resultado = produtoCompraRepository.findOrdem(compra.getPedido());//isso retorna um collection de produtos cadastrados do pedido
-	        Iterator<ProdutoComprado> iterator = resultado.iterator();
-
-	        while (iterator.hasNext()) {//deleta os itens do pedido na tabela correspondente
-	        	produtoCompraRepository.deleteById(iterator.next().getId());;
-	        }
+		Optional<Venda> resultado = vendaRepository.findById(id);// findOrdem(cliente);//isso retorna um collection de produtos cadastrados do pedido
+		if(resultado.isPresent()) {//se existir ordem digitada
+			Venda venda=resultado.get();
+			venda.setStatus("dev");//altera status da ordem
+			vendaRepository.save(venda);//atualiza ordemvenda com status dev
 			
 			
-			this.compraRepository.deleteById(id2);
-			System.out.println("pedido deletado\n");
+			Long idbuscar=venda.getId();
+			//busca todos os produtos da ordem de venda
+			List<ProdutoVenda> result2=produtoVendaRepository.findByIdVenda(idbuscar);
+			Iterator<ProdutoVenda> iterator = result2.iterator();
+			
+			while (iterator.hasNext()) {
+				ProdutoVenda aux=iterator.next();
+				
+				
+				//alterar statusvenda do produtovenda
+				aux.setStatus_venda("dev");
+				produtoVendaRepository.save(aux);//update na tabela produtovenda
+				
+				//devolver qtd pra tabela estoque
+				String lotebuscar=aux.getLote();
+				Optional<ProdutoEmMaos> optional=produtoEmMaosRepository.findByLoteAndProduto(lotebuscar,aux.getNome());
+				if(optional.isPresent()) {//se registro ainda existia na tabela estoque
+					ProdutoEmMaos aux2=optional.get();
+					aux2.setQtdVendida(aux2.getQtdVendida()-aux.getQtd());//devolve quantidade pro estoque
+					produtoEmMaosRepository.save(aux2);//update na tabela estoque em maos
+					
+				}else {//registro nao existia mais
+					//1-buscar produtoComprado por lote_original de aux
+					Optional<ProdutoComprado> optcomprado=produtoCompraRepository.findByLote(lotebuscar);
+					if(optcomprado.isPresent()) {//se encontrou
+						ProdutoComprado aux2=optcomprado.get();
+						//prepara um novo lancamento pra tabela estoque
+						ProdutoEmMaos novo =new ProdutoEmMaos(aux2.getPedidoCompra(),aux2.getQtd(),aux2.getValorUn());
+						novo.setNome(aux.getNome());
+						novo.setDescricao(aux.getDescricao());
+						//seta quantidade vendida como original-qtd devolvida
+						novo.setQtdVendida(aux2.getQtd()-aux.getQtd());
+						produtoEmMaosRepository.save(novo);//"devolve" pro estoque
+					}else {
+						System.out.println("Produto nao encontrado, algo de errado nao esta certo");
+					}
+				}
+			}//while
 		}else {
-			System.out.println("Id invalido");
+			System.out.println("Id de venda nao encontrado");
 		}
 	}
-	private void recebimento(Scanner scanner) {
-		System.out.print("Digite o id do pedido de compra: ");
-		Long id=scanner.nextLong();
-		Optional<Compra> optional = this.compraRepository.findById(id);
-		if(optional.isPresent()) {
-			Compra compra = optional.get();
-			compra.setStatusEstoque("maos");
-			compraRepository.save(compra);//faz update com o novo status
-		}
-		else {
-			System.out.println("Id invalido");
-		}
-	}
-	
-	*/
 }
