@@ -14,7 +14,7 @@ public class ProdutoVenda extends Produto {
 		super();
 		//this.lote = lote;
 		this.qtd = qtd;
-		this.valorUn = valorUn;
+		this.valor_un = valorUn;
 		/*this.valorTotal = valorTotal;
 		this.lucroTotal = lucroTotal;
 		this.status = status;*/
@@ -24,20 +24,11 @@ public class ProdutoVenda extends Produto {
 	
 	public int qtd;
 	
-	public float valorUn;
+	public float valor_un;
 	
-	public float valorTotal;
+	public String status_venda;
 	
-	public float lucroTotal;
-	
-	public String status;
-	
-
-	@Override
-	public String toString() {
-		return "ProdutoVenda [lote=" + lote + ", qtd=" + qtd + ", valorUn=" + valorUn + ", valorTotal=" + valorTotal
-				+ ", lucroTotal=" + lucroTotal + ", status=" + status + "]";
-	}
+	public Long id_venda;
 
 	public String getLote() {
 		return lote;
@@ -55,37 +46,39 @@ public class ProdutoVenda extends Produto {
 		this.qtd = qtd;
 	}
 
-	public float getValorUn() {
-		return valorUn;
+	public float getValor_un() {
+		return valor_un;
 	}
 
-	public void setValorUn(float valorUn) {
-		this.valorUn = valorUn;
+	public void setValor_un(float valor_un) {
+		this.valor_un = valor_un;
 	}
 
-	public float getValorTotal() {
-		return valorTotal;
+	public String getStatus_venda() {
+		return status_venda;
 	}
 
-	public void setValorTotal(float valorTotal) {
-		this.valorTotal = valorTotal;
+	public Long getId_venda() {
+		return id_venda;
 	}
 
-	public float getLucroTotal() {
-		return lucroTotal;
+	public void setId_venda(Long id_venda) {
+		this.id_venda = id_venda;
 	}
 
-	public void setLucroTotal(float lucroTotal) {
-		this.lucroTotal = lucroTotal;
+	@Override
+	public String toString() {
+		return "ProdutoVenda [Nome=" +nome+ ", qtd=" + qtd + ", valor_un=" + valor_un + ", status_venda="
+				+ status_venda + ", id_venda=" + id_venda +  ", lotecompra=" + lote +"]";
 	}
 
-	public String getStatus() {
-		return status;
+	public void setStatus_venda(String status_venda2) {
+		this.status_venda=status_venda2;
+		
 	}
+	
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+
 
 
 	

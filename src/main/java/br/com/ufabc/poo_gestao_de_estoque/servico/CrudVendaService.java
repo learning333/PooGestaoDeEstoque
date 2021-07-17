@@ -60,7 +60,7 @@ public class CrudVendaService {
 				this.cadastrar(scanner);
 				break;
 			case 2:
-				//this.visualizar(scanner);
+				this.visualizar(scanner);
 				break;
 			case 3:
 				//this.devolucao(scanner);
@@ -113,11 +113,12 @@ public class CrudVendaService {
 					ProdutoVenda novo= new ProdutoVenda(qtd,valor);
 					//valor*qtd,pedido);
 					novo.setNome(produto.getNome());
+					novo.setNome(produto.getNome());
 					novo.setDescricao(produto.getDescricao());
 					novo.setLote(produto.getPedidoOriginal());
-					novo.setValorTotal(valor*qtd);
-					novo.setLucroTotal(qtd*(valor-produto.getCustoUn()));
-					novo.setStatus("ok");
+					//novo.setValorTotal(valor*qtd);
+					//novo.setLucroTotal(qtd*(valor-produto.getCustoUn()));
+					novo.setStatus_venda("ok");
 					
 					
 					
@@ -140,7 +141,9 @@ public class CrudVendaService {
 				Venda pedidoVenda=new Venda(vtotal,ltotal,"ok",plataforma,nome);
 				//System.out.print("compra antes do .save"+pedidoCompra);
 				vendaRepository.save(pedidoVenda);
+				Long id_futuro=pedidoVenda.getId();
 				for(ProdutoVenda produto: lista) {
+					produto.setId_venda(id_futuro);
 					produtoVendaRepository.save(produto);
 				}
 				for(ProdutoEmMaos produto: listavelha) {
@@ -151,28 +154,36 @@ public class CrudVendaService {
 
 				gatilho=false;
 				break;
-			case 3:
-				
-				break;
-
 			default:
 				gatilho=false;
 			}
 			
 		}//while
 	}
-	/*
-	private void visualizar(Scanner scanner) {
-		System.out.print("Digite a referencia para o pedido de compra: ");
-		String pedido=scanner.next();
-		List<ProdutoComprado> resultado = produtoCompraRepository.findOrdem(pedido);//isso retorna um collection de produtos cadastrados do pedido
-        Iterator<ProdutoComprado> iterator = resultado.iterator();
-
-        while (iterator.hasNext()) {
-        	System.out.println("value= " + iterator.next());
-        }
-	}
 	
+	private void visualizar(Scanner scanner) {
+		System.out.print("Digite o id da venda: ");
+		Long id=scanner.nextLong();
+		Optional<Venda> resultado = vendaRepository.findById(id);// findOrdem(cliente);//isso retorna um collection de produtos cadastrados do pedido
+		if(resultado.isPresent()) {//se existeir
+			Venda venda=resultado.get();
+			Long idbuscar=venda.getId();
+			List<ProdutoVenda> result2=produtoVendaRepository.findByIdVenda(idbuscar);
+			Iterator<ProdutoVenda> iterator = result2.iterator();
+			
+			while (iterator.hasNext()) {
+				ProdutoVenda aux=iterator.next();
+	        	System.out.println("value= " + aux);
+	        	
+			}
+		}
+		
+		
+
+
+
+	}
+	/*
 	private void deletar(Scanner scanner) {
 		System.out.print("Digite o id do pedido de compra: ");
 		Long id=scanner.nextLong();

@@ -79,4 +79,8 @@ public class Venda extends Ordem{
 	public void setPlataforma(String plataforma) {
 		this.plataforma = plataforma;
 	}
+
+	public Long getId() {
+		return id;
+	}
 }
