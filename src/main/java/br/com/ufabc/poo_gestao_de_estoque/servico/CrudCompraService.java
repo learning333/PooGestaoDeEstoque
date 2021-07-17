@@ -9,11 +9,13 @@ import java.util.Scanner;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.ufabc.poo_gestao_de_estoque.modelo.Caixa;
 import br.com.ufabc.poo_gestao_de_estoque.modelo.Compra;
 import br.com.ufabc.poo_gestao_de_estoque.modelo.Produto;
 import br.com.ufabc.poo_gestao_de_estoque.modelo.ProdutoCadastrado;
 import br.com.ufabc.poo_gestao_de_estoque.modelo.ProdutoComprado;
 import br.com.ufabc.poo_gestao_de_estoque.modelo.ProdutoEmMaos;
+import br.com.ufabc.poo_gestao_de_estoque.repository.CaixaRepository;
 import br.com.ufabc.poo_gestao_de_estoque.repository.OrdemCompraRepository;
 import br.com.ufabc.poo_gestao_de_estoque.repository.ProdutoCompraRepository;
 import br.com.ufabc.poo_gestao_de_estoque.repository.ProdutoEmMaosRepository;
@@ -21,6 +23,7 @@ import br.com.ufabc.poo_gestao_de_estoque.repository.ProdutoRepository;
 
 @Service
 public class CrudCompraService {
+	private CaixaRepository caixaRepository;
 	private OrdemCompraRepository compraRepository;
 	private ProdutoRepository produtoRepository;
 	private ProdutoEmMaosRepository produtoEmMaosRepository;
@@ -29,12 +32,13 @@ public class CrudCompraService {
 	
 	
 	
-	public CrudCompraService(OrdemCompraRepository compraRepository,ProdutoEmMaosRepository produtoEmMaosRepository,ProdutoRepository produtoRepository,ProdutoCompraRepository produtoCompraRepository,List<ProdutoComprado> lista) {
+	public CrudCompraService(OrdemCompraRepository compraRepository, CaixaRepository caixaRepository,ProdutoEmMaosRepository produtoEmMaosRepository,ProdutoRepository produtoRepository,ProdutoCompraRepository produtoCompraRepository,List<ProdutoComprado> lista) {
 		super();
 		this.compraRepository = compraRepository;
 		this.produtoRepository = produtoRepository;
 		this.produtoEmMaosRepository = produtoEmMaosRepository;
 		this.produtoCompraRepository = produtoCompraRepository;
+		this.caixaRepository= caixaRepository;
 		this.lista=lista;
 	}
 
@@ -115,10 +119,14 @@ public class CrudCompraService {
 					System.out.println("Produto nao cadastrado.");
 				}
 				break;
-			case 2:
+			case 2://fechar pedido
 				Compra pedidoCompra=new Compra(pedido,vtotal,statusestoque);
 				System.out.print("compra antes do .save"+pedidoCompra);
 				compraRepository.save(pedidoCompra);
+				
+				Caixa operacao=new Caixa(pedidoCompra.getId(),"COMPRA",-vtotal);
+				caixaRepository.save(operacao);
+				
 				for(ProdutoComprado produto: lista) {
 					produtoCompraRepository.save(produto);
 				}
@@ -166,6 +174,8 @@ public class CrudCompraService {
 			
 			
 			this.compraRepository.deleteById(id2);
+			Caixa operacao=new Caixa(compra.getId(),"ESTORNO_COMPRA",compra.getvalorTotal());
+			caixaRepository.save(operacao);
 			System.out.println("pedido deletado\n");
 		}else {
 			System.out.println("Id invalido");

@@ -52,6 +52,10 @@ public class Compra extends Ordem{
 		
 		return pedido;
 	}
+	public float getvalorTotal() {
+		
+		return valorTotal;
+	}
 
 	public void setStatusEstoque(String string) {
 		this.statusestoque=string;

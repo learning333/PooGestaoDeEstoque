@@ -10,12 +10,14 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.ufabc.poo_gestao_de_estoque.modelo.Caixa;
 import br.com.ufabc.poo_gestao_de_estoque.modelo.Compra;
 import br.com.ufabc.poo_gestao_de_estoque.modelo.ProdutoCadastrado;
 import br.com.ufabc.poo_gestao_de_estoque.modelo.ProdutoComprado;
 import br.com.ufabc.poo_gestao_de_estoque.modelo.ProdutoEmMaos;
 import br.com.ufabc.poo_gestao_de_estoque.modelo.ProdutoVenda;
 import br.com.ufabc.poo_gestao_de_estoque.modelo.Venda;
+import br.com.ufabc.poo_gestao_de_estoque.repository.CaixaRepository;
 import br.com.ufabc.poo_gestao_de_estoque.repository.OrdemCompraRepository;
 import br.com.ufabc.poo_gestao_de_estoque.repository.OrdemVendaRepository;
 import br.com.ufabc.poo_gestao_de_estoque.repository.ProdutoCompraRepository;
@@ -25,6 +27,7 @@ import br.com.ufabc.poo_gestao_de_estoque.repository.ProdutoVendaRepository;
 
 @Service
 public class CrudVendaService {
+	private CaixaRepository caixaRepository;
 	private OrdemVendaRepository vendaRepository;
 	private OrdemCompraRepository compraRepository;
 	private ProdutoVendaRepository produtoVendaRepository;
@@ -33,10 +36,11 @@ public class CrudVendaService {
 	private List<ProdutoVenda> lista;
 	
 	
-	public CrudVendaService(OrdemVendaRepository vendaRepository, OrdemCompraRepository compraRepository,
+	public CrudVendaService(CaixaRepository caixaRepository, OrdemVendaRepository vendaRepository, OrdemCompraRepository compraRepository,
 			ProdutoVendaRepository produtoVendaRepository, ProdutoEmMaosRepository produtoEmMaosRepository,
 			List<ProdutoVenda> lista,ProdutoCompraRepository produtoCompraRepository) {
 		super();
+		this.caixaRepository = caixaRepository;
 		this.vendaRepository = vendaRepository;
 		this.compraRepository = compraRepository;
 		this.produtoVendaRepository = produtoVendaRepository;
@@ -138,11 +142,17 @@ public class CrudVendaService {
 					System.out.println("Produto nao disponivel no estoque.");
 				}
 				break;
-			case 2:
+			case 2://fecha pedido venda
+				
 				                 //venda((float valorTotal, float lucroTotal, String status, String plataforma, String nome_cliente))
 				Venda pedidoVenda=new Venda(vtotal,ltotal,"ok",plataforma,nome);
 				//System.out.print("compra antes do .save"+pedidoCompra);
 				vendaRepository.save(pedidoVenda);
+				
+				Caixa operacao=new Caixa(pedidoVenda.getId(),"VENDA",vtotal);//entra vtotal no caixa
+				caixaRepository.save(operacao);
+				
+				
 				Long id_futuro=pedidoVenda.getId();
 				for(ProdutoVenda produto: lista) {
 					produto.setId_venda(id_futuro);
@@ -188,6 +198,9 @@ public class CrudVendaService {
 			Venda venda=resultado.get();
 			venda.setStatus("dev");//altera status da ordem
 			vendaRepository.save(venda);//atualiza ordemvenda com status dev
+			
+			Caixa operacao=new Caixa(venda.getId(),"DEVOLUCAO_VENDA",-venda.getValorTotal());//tira do caixa dinheiro da venda
+			caixaRepository.save(operacao);
 			
 			
 			Long idbuscar=venda.getId();
