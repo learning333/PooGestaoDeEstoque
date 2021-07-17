@@ -61,7 +61,13 @@ public class Compra extends Ordem{
 		this.statusestoque=string;
 		
 	}
-		
+
+	@Override
+	public String toString() {
+		return "Compra [pedido=" + pedido + ", valorTotal=" + valorTotal + ", statusestoque=" + statusestoque + ", id="
+				+ id + "]";
+	}
+
 
 
 

@@ -1,5 +1,6 @@
 package br.com.ufabc.poo_gestao_de_estoque.servico;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -55,24 +56,29 @@ public class CrudVendaService {
 		while(gatilho) {
 			System.out.println("\nEscolha acao");
 			System.out.println("0-voltar");
-			System.out.println("1-Nova Ordem de Venda");
-			System.out.println("2-Visualizar Ordem de Venda");
-			System.out.println("3-Devolução");
+			System.out.println("1-Consulta Estoque");
+			System.out.println("2-Ajuste Estoque");
+			System.out.println("3-Nova Ordem de Venda");
+			System.out.println("4-Visualizar Ordem de Venda");
+			System.out.println("5-Devolução");
 			
 			int opcao=scanner.nextInt();
 			
 			switch(opcao) {
 			case 1:
-				this.cadastrar(scanner);
+				this.consultaEstoque(scanner);
 				break;
 			case 2:
-				this.visualizar(scanner);
+				this.ajustaEstoque(scanner);
 				break;
 			case 3:
-				this.devolucao(scanner);
+				this.cadastrar(scanner);
 				break;
 			case 4:
-				//this.recebimento(scanner);
+				this.visualizar(scanner);
+				break;
+			case 5:
+				this.devolucao(scanner);
 				break;
 			default:
 				gatilho=false;
@@ -146,6 +152,13 @@ public class CrudVendaService {
 				
 				                 //venda((float valorTotal, float lucroTotal, String status, String plataforma, String nome_cliente))
 				Venda pedidoVenda=new Venda(vtotal,ltotal,"ok",plataforma,nome);
+				
+				
+				LocalDate ahora = LocalDate.now();
+			    //System.out.println(String.valueOf(ahora));
+			    
+				pedidoVenda.setData(String.valueOf(ahora));
+				
 				//System.out.print("compra antes do .save"+pedidoCompra);
 				vendaRepository.save(pedidoVenda);
 				
@@ -243,6 +256,46 @@ public class CrudVendaService {
 			}//while
 		}else {
 			System.out.println("Id de venda nao encontrado");
+		}
+	}
+	private void consultaEstoque(Scanner scanner) {
+		System.out.print("Digite 0 para visualizar todo o estoque ou o nome do produto para visualizar produto especifico:");
+		String nomeprod=scanner.next();
+		System.out.println(nomeprod.getClass().getSimpleName());
+		Iterable<ProdutoEmMaos> lista;
+		if(nomeprod.equals("0")) {
+			System.out.println("Buscando...");
+			lista= produtoEmMaosRepository.findAll();
+
+		}else {
+			System.out.println("Filtrando...");
+			lista= produtoEmMaosRepository.findAllByNome(nomeprod);
+		}
+		System.out.println("Mostrando "+((List<ProdutoEmMaos>) lista).size()+" registros.");
+		for(ProdutoEmMaos produto: lista) {
+			System.out.println(produto);
+		}
+		System.out.println();
+	}
+	private void ajustaEstoque(Scanner scanner) {
+		System.out.print("Digite o nome do produto: ");
+		String nomeprod=scanner.next();
+		Iterable<ProdutoEmMaos> lista = produtoEmMaosRepository.findAllByNome(nomeprod);
+		System.out.print("---------------------------");
+		for(ProdutoEmMaos produto: lista) {
+			System.out.println(produto);
+		}
+		System.out.print("Digite o id do produto a ser ajustado: ");
+		Long idajustar=scanner.nextLong();
+		Optional<ProdutoEmMaos> novo= produtoEmMaosRepository.findById(idajustar);
+		if(novo.isPresent()) {//se digitou numero valido
+			ProdutoEmMaos aux=novo.get();
+			System.out.print("Digite a qtd em unidades a serem ajustadas: ");
+			int qtd=scanner.nextInt();
+			aux.setQtdVendida(aux.getQtdVendida()+qtd);
+			
+			produtoEmMaosRepository.save(aux);//atualiza registro
+			System.out.print("Ajustado!");
 		}
 	}
 }

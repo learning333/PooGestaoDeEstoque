@@ -1,5 +1,7 @@
 package br.com.ufabc.poo_gestao_de_estoque.servico;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -121,6 +123,11 @@ public class CrudCompraService {
 				break;
 			case 2://fechar pedido
 				Compra pedidoCompra=new Compra(pedido,vtotal,statusestoque);
+			    LocalDate ahora = LocalDate.now();
+			    System.out.println(String.valueOf(ahora));
+			    
+				pedidoCompra.setData(String.valueOf(ahora));
+				
 				System.out.print("compra antes do .save"+pedidoCompra);
 				compraRepository.save(pedidoCompra);
 				

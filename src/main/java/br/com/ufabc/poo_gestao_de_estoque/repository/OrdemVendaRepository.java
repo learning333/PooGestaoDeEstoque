@@ -17,4 +17,9 @@ public interface OrdemVendaRepository extends CrudRepository<Venda, Long>{
 			  value = "SELECT * FROM produto_comprado where nome_cliente= :nome", 
 			  nativeQuery = true)
 	List<Venda> findOrdemByCliente(@Param("nome") String nome);
+	
+	@Query(
+			  value = "SELECT * FROM vendas where data like :anomes%", 
+			  nativeQuery = true)
+	List<Venda> findByYearMonth(@Param("anomes") String anomes);
 }

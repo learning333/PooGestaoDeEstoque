@@ -13,5 +13,10 @@ public abstract class Ordem {
 	protected Long id;
 	
 	@Column(name="data")
-	private int data;
+	private String data;
+	
+	public void setData(String data) {
+		this.data=data;
+		
+	}
 }

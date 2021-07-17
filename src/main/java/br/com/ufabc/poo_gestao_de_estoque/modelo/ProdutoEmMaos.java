@@ -27,6 +27,13 @@ public class ProdutoEmMaos extends Produto{
 		this.custoUn = custoUn;
 	}
 
+	@Override
+	public String toString() {
+		return "ProdutoEmMaos [pedidoOriginal=" + pedidoOriginal + ", qtdOriginal=" + qtdOriginal + ", qtdVendida="
+				+ qtdVendida + ", custoUn=" + custoUn + ", id=" + id + ", nome=" + nome + ", descricao=" + descricao
+				+ "]";
+	}
+
 	public String getPedidoOriginal() {
 		return pedidoOriginal;
 	}
