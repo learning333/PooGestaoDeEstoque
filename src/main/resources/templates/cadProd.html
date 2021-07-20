@@ -15,20 +15,42 @@
 	
 	<body>
 		<h1>Produtos</h1>
+		<h3><a class="waves-effect waves-light btn" href="/cadProd"><i class="material-icons left">add_circle_outline</i>Cadastrar Produtos</a>
+		<a class="waves-effect waves-light btn" href="/cadastrarCompra"><i class="material-icons left">add_circle_outline</i>Atualizar Produto</a>
+		<a class="waves-effect waves-light btn" href="/listarProd"><i class="material-icons left">add_circle_outline</i>Listar Todos</a></h3>
+		
+		<!--formulario cadastro-->
+		<form class="container" method="post">
+			
+			<div class="row">
+				<div class="input.field col s3">
+			Nome: <input type="text" value="" name="nome"/>
+				
+				</div>
+				<div class="input.field col s3">
+			Descricao: <input type="text" value="" name="descricao"/>
+				</div>
+				
+			</div>
+			<button type="submit" class="waves-effect waves-light btn">Cadastrar</button>
+		</form>
+		
+		
+		
 
 		<table class="container">
 			<thead>
 				<tr>
-					<th>Referencia</th>
-					<th>Data</th>
-					<th>Status</th>
+					<th>Id</th>
+					<th>Nome</th>
+					<th>Descricao</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="OrdemCompra : ${ordensCompra}">
-						<td><span th:text="${OrdemCompra.ref}"></span></td>
-						<td><span th:text="${OrdemCompra.data}"></span></td>
-						<td><span th:text="${OrdemCompra.status}"></span></td>
+				<tr th:each="OrdemCompra : ${produtosCadastrados}">
+						<td><span th:text="${ProdutoCadastrado.nome}"></span></td>
+						<td><span th:text="${ProdutoCadastrado.nome}"></span></td>
+						<td><span th:text="${ProdutoCadastrado.descricao}"></span></td>
 				</tr>
 			
 			</tbody>
