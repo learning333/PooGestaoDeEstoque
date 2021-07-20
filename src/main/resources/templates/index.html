@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org"
+		xmlns:layout="http://ultraq.net.nz/thymeleaf/layout">
+	<head>
+		<title>Controle de Estoque</title>
+		
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+      <!--Import materialize.css-->
+      <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css"  media="screen,projection"/>
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		
+	</head>
+	
+	<body>
+		<h1>Gestao de Estoque</h1>
+		<h3><a class="waves-effect waves-light btn" href="/cadastrarCompra"><i class="material-icons left">add_circle_outline</i>Cadastro de Produtos</a></h3>
+		<h3><a class="waves-effect waves-light btn" href="/cadastrarCompra"><i class="material-icons left">add_circle_outline</i>Ordens de Compra</a></h3>
+		<h3><a class="waves-effect waves-light btn" href="/cadastrarCompra"><i class="material-icons left">add_circle_outline</i>Estoque</a></h3>
+		<h3><a class="waves-effect waves-light btn" href="/cadastrarCompra"><i class="material-icons left">add_circle_outline</i>Ordens de Venda</a></h3>
+		<h3><a class="waves-effect waves-light btn" href="/cadastrarCompra"><i class="material-icons left">add_circle_outline</i>Status Geral</a></h3>
+		
+		<table class="container">
+			<thead>
+				<tr>
+					<th>Referencia</th>
+					<th>Data</th>
+					<th>Status</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="OrdemCompra : ${ordensCompra}">
+						<td><span th:text="${OrdemCompra.ref}"></span></td>
+						<td><span th:text="${OrdemCompra.data}"></span></td>
+						<td><span th:text="${OrdemCompra.status}"></span></td>
+				</tr>
+			
+			</tbody>
+		
+		</table>
+
+		
+		
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+	
+	</body>
+</html>
