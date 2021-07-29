@@ -12,13 +12,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 
-import br.com.ufabc.poo_gestao_de_estoque.modelo.ProdutoCadastrado;
-import br.com.ufabc.poo_gestao_de_estoque.repository.ProdutoRepository;
-
-
 @Controller
 public class WebProdutoController {
-	@Autowired//injecao de dependencia
+	/*@Autowired//injecao de dependencia
 	private ProdutoRepository pr;
 	
 	@RequestMapping(value="/cadastrarProduto", method=RequestMethod.GET)
@@ -47,6 +43,6 @@ public class WebProdutoController {
 		ModelAndView mv=new ModelAndView("detalhesProduto");
 		mv.addObject("Produto", produto);
 		return mv;
-	}
+	}*/
 	
 }
