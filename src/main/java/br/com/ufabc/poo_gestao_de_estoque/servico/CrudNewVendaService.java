@@ -5,8 +5,10 @@ import java.util.Scanner;
 
 import org.springframework.stereotype.Service;
 
+
 import br.com.ufabc.poo_gestao_de_estoque.modelo.Lote;
 import br.com.ufabc.poo_gestao_de_estoque.modelo.NewVenda;
+
 import br.com.ufabc.poo_gestao_de_estoque.repository.LoteRepository;
 import br.com.ufabc.poo_gestao_de_estoque.repository.NewVendaRepository;
 
@@ -15,10 +17,12 @@ import br.com.ufabc.poo_gestao_de_estoque.repository.NewVendaRepository;
 
 @Service
 public class CrudNewVendaService {
+	//private LivroCaixaRepository livroCaixaRepository;
 	private LoteRepository loteRepository;
 	private NewVendaRepository vendaRepository;
 	
-	public CrudNewVendaService(LoteRepository loteRepository, NewVendaRepository vendaRepository) {
+	public CrudNewVendaService(LoteRepository loteRepository, NewVendaRepository vendaRepository) {//LivroCaixaRepository livroCaixaRepository,
+		//this.livroCaixaRepository=livroCaixaRepository;
 		this.loteRepository = loteRepository;
 		this.vendaRepository=vendaRepository;
 	}
@@ -66,7 +70,8 @@ public class CrudNewVendaService {
 				int qtd=scanner.nextInt();
 				// to-do: validar qtd
 				System.out.print("Preco unitario:");
-				Float precoVenda=scanner.nextFloat();
+				float precoVenda=scanner.nextFloat();
+				float valorTotal=qtd*precoVenda;
 				
 				System.out.print("nome cliente: ");
 				String nome=scanner.next();
@@ -76,6 +81,8 @@ public class CrudNewVendaService {
 				lote.setQtdVendida(lote.getQtdVendida()+qtd);
 				vendaRepository.save(newVenda);
 				loteRepository.save(lote);//update qtd vendida
+				//LivroCaixa operacaoVenda= new LivroCaixa(lote,"venda",valorTotal);
+				//this.livroCaixaRepository.save(operacaoVenda);
 				System.out.print("Salvo\n");
 			}else {
 				System.out.print("Pedido de compra nao disponivel [status="+lote.getStatus()+"]");

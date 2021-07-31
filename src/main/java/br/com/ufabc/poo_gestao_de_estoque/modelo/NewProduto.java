@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="NewProdutos")
-public class NewProduto {
+public class NewProduto{// extends EntidadeBase{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long id;
@@ -39,7 +39,7 @@ public class NewProduto {
 
 	@Override
 	public String toString() {
-		return "NewProduto [id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", lotes=" + lotes + "]";
+		return "NewProduto [id=" + id + ", nome=" + nome + ", descricao=" + descricao + "]";//, lotes=" + lotes + "]";
 	}
 	
 	

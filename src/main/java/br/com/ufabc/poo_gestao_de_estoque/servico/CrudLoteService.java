@@ -6,9 +6,10 @@ import java.util.Scanner;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import br.com.ufabc.poo_gestao_de_estoque.modelo.Lote;
 import br.com.ufabc.poo_gestao_de_estoque.modelo.NewProduto;
-import br.com.ufabc.poo_gestao_de_estoque.modelo.NewVenda;
+
 import br.com.ufabc.poo_gestao_de_estoque.repository.LoteRepository;
 import br.com.ufabc.poo_gestao_de_estoque.repository.NewProdutoRepository;
 
@@ -17,15 +18,20 @@ import br.com.ufabc.poo_gestao_de_estoque.repository.NewProdutoRepository;
 
 @Service
 public class CrudLoteService {
+	//private LivroCaixaRepository livroCaixaRepository;
 	private LoteRepository loteRepository;
 	private NewProdutoRepository newProdutoRepository;
 	
-	public CrudLoteService(LoteRepository loteRepository,NewProdutoRepository newProdutoRepository) {
+
+	
+	
+	public CrudLoteService( LoteRepository loteRepository,
+			NewProdutoRepository newProdutoRepository) {//LivroCaixaRepository livroCaixaRepository,
+		super();
+		//this.livroCaixaRepository = livroCaixaRepository;
 		this.loteRepository = loteRepository;
-		this.newProdutoRepository= newProdutoRepository;
+		this.newProdutoRepository = newProdutoRepository;
 	}
-	
-	
 	@Transactional
 	public void menu(Scanner scanner) {
 		boolean gatilho=true;
@@ -78,10 +84,14 @@ public class CrudLoteService {
 			String data=scanner.next();
 			System.out.print("Digite preco unitario");
 			float precoUn=scanner.nextFloat();
+			float valorTotal=qtd*precoUn;
 			NewProduto newProduto = optional.get();
 			//				(String referencia, String data, String status, Produto produto)
 			Lote lote=new Lote(referencia,data,"transito",newProduto,qtd,precoUn);
 			this.loteRepository.save(lote);
+			System.out.print(lote);
+			//LivroCaixa operacaoCompra= new LivroCaixa(lote,"compra",-valorTotal);
+			//this.livroCaixaRepository.save(operacaoCompra);
 			System.out.println("SALVO!\n\n");
 		}else {
 			System.out.println("id newProduto não encontrado!\n\n");

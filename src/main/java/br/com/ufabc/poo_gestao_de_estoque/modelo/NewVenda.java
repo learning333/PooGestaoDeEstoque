@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+
+
 @Entity
 @Table(name="NewVendas")
 public class NewVenda {
@@ -19,6 +21,8 @@ public class NewVenda {
 	
 	public String nomeCliente;
 	
+
+
 	public float precoVenda;
 	
 	public int qtd;
@@ -40,7 +44,12 @@ public class NewVenda {
 		this.lucro=lucro;
 	}
 
-	
+
+	//@Override
+//	public String toString() {
+	//	return "NewVenda [nomeCliente=" + nomeCliente + ", precoVenda=" + precoVenda + ", qtd=" + qtd + ", lucro="
+		//		+ lucro + ", lote=" + lote + "]";
+	//}
 	
 }
 

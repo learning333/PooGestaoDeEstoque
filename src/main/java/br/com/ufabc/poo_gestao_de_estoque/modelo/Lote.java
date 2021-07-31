@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+
 @Entity
 @Table(name="Lote")
 public class Lote {
@@ -31,6 +32,7 @@ public class Lote {
 	
 	
 	@OneToMany(mappedBy="lote", fetch=FetchType.EAGER)
+	//@Fetch(value = FetchMode.SUBSELECT)
 	//FEtch EAGER - traz as materias junto, lazy não
 	//cascade all- quando apaga prof as disciplinas vao junto
 	private List<NewVenda> ListaDeVendas;
@@ -45,6 +47,9 @@ public class Lote {
 	private int qtdVendida;
 	
 	private float custo;
+	
+	
+	
 	
 	@Deprecated
 	public Lote() {}
@@ -83,7 +88,17 @@ public class Lote {
 		this.qtdVendida+=i;
 		
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Lote [referencia=" + referencia + ", data=" + data + ", status=" + status + ", ListaDeVendas="
+				+ ListaDeVendas + ", produto=" + produto + ", qtd=" + qtd + ", qtdVendida=" + qtdVendida + ", custo="
+				+ custo + ", id=" + id + "]";
+	}
+
+
+
+
 	
 	
 }
