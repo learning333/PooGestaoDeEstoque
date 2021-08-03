@@ -21,8 +21,10 @@ public class NewVenda {
 	
 	public String nomeCliente;
 	
-
-
+	
+	@Column
+	public String status;
+	
 	public float precoVenda;
 	
 	public int qtd;
@@ -44,12 +46,32 @@ public class NewVenda {
 		this.lucro=lucro;
 	}
 
-
-	//@Override
-//	public String toString() {
-	//	return "NewVenda [nomeCliente=" + nomeCliente + ", precoVenda=" + precoVenda + ", qtd=" + qtd + ", lucro="
-		//		+ lucro + ", lote=" + lote + "]";
+	public void setStatus(String string) {
+		this.status=string;
+		
+	}
+	//public long getLoteID() {
+	//	return this.lote.getId();
 	//}
+	public int getQtd() {
+		return this.qtd;
+	}
+
+
+	
+	public String toString() {
+		return " ID VENDA: ["+id+"] Cliente=" + nomeCliente + " Status=" + status + 
+				"\n Produto ["+lote.getNomeProduto()+"] Qtd: "+qtd+ " Valor Un: "+precoVenda+
+				"\n Valor Total: "+qtd*precoVenda +"Lucro: "+lucro;
+	}
+
+	public Lote getLote() {
+		return this.lote;
+	}
+
+	public String getStatus() {
+		return status;
+	}
 	
 }
 

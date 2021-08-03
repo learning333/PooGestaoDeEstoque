@@ -17,12 +17,12 @@ import br.com.ufabc.poo_gestao_de_estoque.repository.NewVendaRepository;
 
 @Service
 public class CrudNewVendaService {
-	//private LivroCaixaRepository livroCaixaRepository;
+
 	private LoteRepository loteRepository;
 	private NewVendaRepository vendaRepository;
 	
-	public CrudNewVendaService(LoteRepository loteRepository, NewVendaRepository vendaRepository) {//LivroCaixaRepository livroCaixaRepository,
-		//this.livroCaixaRepository=livroCaixaRepository;
+	public CrudNewVendaService(LoteRepository loteRepository, NewVendaRepository vendaRepository) {
+
 		this.loteRepository = loteRepository;
 		this.vendaRepository=vendaRepository;
 	}
@@ -36,8 +36,9 @@ public class CrudNewVendaService {
 			System.out.println("0-voltar");
 			System.out.println("1-Nova Venda");
 			System.out.println("2-Listar Vendas");
-			//System.out.println("3-Listar newVendas");
-			//System.out.println("4-Deletar newVenda");
+			System.out.println("3-Listar Produtos Em Maos");
+			System.out.println("4-Devolucao");
+
 			
 			int opcao=scanner.nextInt();
 			
@@ -48,6 +49,12 @@ public class CrudNewVendaService {
 			case 2:
 				this.visualizar();
 				break;
+			case 3:
+				this.estoqueEmMaos();
+				break;
+			case 4:
+				this.devolucao(scanner);
+				break;
 			default:
 				gatilho=false;
 			}
@@ -56,7 +63,14 @@ public class CrudNewVendaService {
 		System.out.println();
 	}
 	private void cadastrar(Scanner scanner) {
-		System.out.print("Id lote");
+		Iterable<Lote> lista = this.loteRepository.findAll();
+		for(Lote lote: lista) {
+			if(lote.getStatus().equals("em maos")){
+				System.out.println(lote.listagemParaVenda());
+			}
+		}
+		System.out.println();
+		System.out.print("Digite o Id do lote de origem do produto a ser vendido: ");
 		Long idprof=scanner.nextLong();
 		
 		Optional<Lote> optional = this.loteRepository.findById(idprof);
@@ -65,10 +79,26 @@ public class CrudNewVendaService {
 			int qtdDisponivel=lote.getQtd()-lote.getQtdVendida();
 			if(lote.getStatus().equals("em maos")) {//tem quantidade disponivel>0
 				
+				System.out.println("Produto:["+lote.getNomeProduto()+"]");
 				System.out.println("Quantidade Disponivel:["+qtdDisponivel+"]");
+
 				System.out.print("Qtd vendida:");
 				int qtd=scanner.nextInt();
-				// to-do: validar qtd
+				
+				
+				boolean filtro=true;
+				while(filtro) {
+					if(qtd>qtdDisponivel) {
+						System.out.print("Quantidade inserida ["+qtd+"] maior do que quantidade disponivel ["+qtdDisponivel+"]" );
+						System.out.print( "\nDigite um valor valido: ");
+						qtd=scanner.nextInt();
+					}else {//digitou quantidade valida
+
+						filtro=false;
+					}
+				}
+
+				
 				System.out.print("Preco unitario:");
 				float precoVenda=scanner.nextFloat();
 				float valorTotal=qtd*precoVenda;
@@ -76,11 +106,19 @@ public class CrudNewVendaService {
 				System.out.print("nome cliente: ");
 				String nome=scanner.next();
 				
-				float lucro=precoVenda-lote.getCusto();
+				float lucro=(precoVenda-lote.getCusto())*qtd;
 				NewVenda newVenda=new NewVenda(nome,precoVenda,lote,qtd,lucro);
+				newVenda.setStatus("normal");
 				lote.setQtdVendida(lote.getQtdVendida()+qtd);
 				vendaRepository.save(newVenda);
+				
+				
+				if(qtdDisponivel-qtd==0) {
+					lote.setStatus("encerrado");//vendeu toda quantidade do lote de compra
+				}
 				loteRepository.save(lote);//update qtd vendida
+				
+				
 				//LivroCaixa operacaoVenda= new LivroCaixa(lote,"venda",valorTotal);
 				//this.livroCaixaRepository.save(operacaoVenda);
 				System.out.print("Salvo\n");
@@ -99,54 +137,54 @@ public class CrudNewVendaService {
 		}
 		System.out.println();
 	}
-
-	private void atualizar(Scanner scanner) {
-		/*System.out.print("Digite o id da discplina a ser atualizado: ");
-		Long id=scanner.nextLong();
-
-		Optional<NewVenda> optional = this.dRepository.findById(id);
-		if(optional.isPresent()) {
-			NewVenda newVenda=optional.get();
-			
-			System.out.print("Digite Nome: ");
-			String nome=scanner.next();
-			System.out.print("Semestre: ");
-			Integer semestre=scanner.nextInt();
-			System.out.print("Id lote");
-			Long idprof=scanner.nextLong();
-			
-			Optional<Lote> profoptional = this.loteRepository.findById(idprof);
-			if(profoptional.isPresent()) {
-				Lote lote = profoptional.get();
-				newVenda.setNome(nome);
-				newVenda.setSemestre(semestre);
-				newVenda.setLote(lote);
-				
-				dRepository.save(newVenda);
-				System.out.print("Atualizado\n");
-			}else {
-				System.out.print("ID do lote nao existe");
+	private void estoqueEmMaos() {
+		Iterable<Lote> lista = this.loteRepository.findAll();
+		for(Lote lote: lista) {
+			if(lote.getStatus().equals("em maos")){
+				System.out.println(lote);
 			}
-		}//if newVenda existe
-		else {
-			System.out.println("ID INVALIDO\n");
 		}
-		*/
+		System.out.println();
 	}
-	
-
-	private void deletar(Scanner scanner) {
-		/*System.out.print("Digite o id da newVenda a ser deletada: ");
+	private void devolucao(Scanner scanner) {
+		
+		Iterable<NewVenda> lista = this.vendaRepository.findAll();
+		for(NewVenda newVenda: lista) {
+			if(newVenda.getStatus().equals("normal")){
+				System.out.println(newVenda);
+				System.out.println();
+			}
+			
+		}
+		System.out.println();
+		
+		System.out.print("Digite o id da venda: ");
 		Long id=scanner.nextLong();
-
-		Optional<NewVenda> optional = this.dRepository.findById(id);
+		Optional<NewVenda> optional = this.vendaRepository.findById(id);
 		if(optional.isPresent()) {
-			NewVenda newVenda = optional.get();
-			Long id2 =newVenda.getId();
-			this.dRepository.deleteById(id2);
-			System.out.println("NewVenda deletada\n");
+			NewVenda venda = optional.get();
+			venda.setStatus("devolvido");
+			this.vendaRepository.save(venda);//update
+			
+			//devolver quantidade para o lotecompra
+
+			Lote lotecompra=venda.getLote();//optLote.get();
+			lotecompra.setQtdVendida(-venda.getQtd());
+			if(lotecompra.getStatus().equals("encerrado")) {//se estava zerado reativa o lote compra
+				lotecompra.setStatus("em maos");
+			}
+			this.loteRepository.save(lotecompra);//update
+			System.out.println("Venda devolvida: ");
+			System.out.println(venda);
+			System.out.println("------------------------------");
+			System.out.println("Item retornado ao estoque: ");
+			System.out.println(lotecompra);
+			System.out.println("------------------------------");
+			System.out.print("Concluido!\n");
 		}else {
-			System.out.println("Id invalido");
-		}*/
+			System.out.print("ID do lote nao existe");
+		}
 	}
+
+
 }

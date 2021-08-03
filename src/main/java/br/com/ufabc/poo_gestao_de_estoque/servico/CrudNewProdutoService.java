@@ -61,10 +61,13 @@ public class CrudNewProdutoService {
 	
 	
 	private void visualizar() {
+		System.out.println("----Listando Produtos-----");
 		Iterable<NewProduto> lista = this.newprodutoRepository.findAll();
 		for(NewProduto produto: lista) {
+			
 			System.out.println(produto);
 		}
+		System.out.println("----------FIM-------------");
 		System.out.println();
 	}
 

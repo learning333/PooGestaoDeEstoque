@@ -39,9 +39,11 @@ public class NewProduto{// extends EntidadeBase{
 
 	@Override
 	public String toString() {
-		return "NewProduto [id=" + id + ", nome=" + nome + ", descricao=" + descricao + "]";//, lotes=" + lotes + "]";
+		return "ID: [" + id + "] Nome=" + nome + " Descricao=" + descricao;//, lotes=" + lotes + "]";
 	}
 	
-	
+	public String getNome() {
+		return this.nome;
+	}
 	
 }

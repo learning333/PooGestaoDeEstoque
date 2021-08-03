@@ -79,6 +79,9 @@ public class Lote {
 	public int getQtdVendida() {
 		return qtdVendida;
 	}
+	//public long getId() {
+	//	return id;
+	//}
 
 	public float getCusto() {
 		return custo;
@@ -91,13 +94,21 @@ public class Lote {
 
 	@Override
 	public String toString() {
-		return "Lote [referencia=" + referencia + ", data=" + data + ", status=" + status + ", ListaDeVendas="
-				+ ListaDeVendas + ", produto=" + produto + ", qtd=" + qtd + ", qtdVendida=" + qtdVendida + ", custo="
-				+ custo + ", id=" + id + "]";
+		return " ID COMPRA: ["+id+"] Ref: " + referencia + 
+				"\n Produto[ " + produto +
+				"]\n Data: " + data + " Status: " + status + 
+				"\n Quantidade: " + qtd + "   Custo Un: "+ custo + "   Custo Total: "+qtd*custo+
+				"\n Quantidade Vendida: " + qtdVendida;
+	}
+	public String listagemParaVenda() {
+		return " ID COMPRA: ["+id+"] Produto[ " + produto.getNome() +"] Quantidade Disponivel: "+(qtd-qtdVendida);
 	}
 
 
 
+	public String getNomeProduto(){
+		return this.produto.getNome();
+	}
 
 	
 	

@@ -30,10 +30,10 @@
 				<div class="input.field col s3">
 			Descricao: <input type="text" value="" name="descricao"/>
 				</div>
+				<button type="submit" class="waves-effect waves-light btn">Cadastrar</button>
 				
 			</div>
-			<button type="submit" class="waves-effect waves-light btn">Cadastrar</button>
-		</form>
+					</form>
 		
 		
 		
@@ -41,16 +41,16 @@
 		<table class="container">
 			<thead>
 				<tr>
-					<th>Id</th>
+					
 					<th>Nome</th>
 					<th>Descricao</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="OrdemCompra : ${produtosCadastrados}">
-						<td><span th:text="${ProdutoCadastrado.nome}"></span></td>
-						<td><span th:text="${ProdutoCadastrado.nome}"></span></td>
-						<td><span th:text="${ProdutoCadastrado.descricao}"></span></td>
+				<tr th:each="NewProduto : ${produtosCadastrados}">
+						<td><span th:text="${NewProduto.nome}"></span></td>
+					
+						<td><span th:text="${NewProduto.descricao}"></span></td>
 				</tr>
 			
 			</tbody>

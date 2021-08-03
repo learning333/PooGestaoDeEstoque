@@ -30,12 +30,7 @@ public class PooGestaoDeEstoqueApplication implements CommandLineRunner{
 		this.npservice = npservice;
 		this.nvservice = nvservice;
 	}
-	/*public PooGestaoDeEstoqueApplication(CaixaService caixaService, CrudProdutoService produtoService , CrudCompraService compraService, CrudVendaService vendaService) {
-		this.caixaService=caixaService;
-		this.produtoService=produtoService;
-		this.compraService=compraService;
-		this.vendaService=vendaService;
-	}*/
+
 	public static void main(String[] args) {
 		SpringApplication.run(PooGestaoDeEstoqueApplication.class, args);
 	}
@@ -50,20 +45,21 @@ public class PooGestaoDeEstoqueApplication implements CommandLineRunner{
 		while(gatilho) {
 			System.out.println("Escolha entidade");
 			System.out.println("-----------");
-			System.out.println("6-NewProduto");
-			System.out.println("7-NewCompra");
-			System.out.println("8-NewVenda");
+			System.out.println("1-Produtos");
+			System.out.println("2-Compras");
+			System.out.println("3-Vendas");
+			System.out.println("4-Situacional");
 			
 			int opcao=scanner.nextInt();
 			
 			switch(opcao) {
-			case 6:
+			case 1:
 				this.npservice.menu(scanner);
 				break;
-			case 7:
+			case 2:
 				this.loteService.menu(scanner);
 				break;
-			case 8:
+			case 3:
 				this.nvservice.menu(scanner);
 				break;
 			default:
