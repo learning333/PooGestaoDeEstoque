@@ -6,10 +6,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-
-import br.com.ufabc.poo_gestao_de_estoque.servico.CrudLoteService;
-import br.com.ufabc.poo_gestao_de_estoque.servico.CrudNewProdutoService;
-import br.com.ufabc.poo_gestao_de_estoque.servico.CrudNewVendaService;
+import br.com.ufabc.poo_gestao_de_estoque.controle.CrudLoteService;
+import br.com.ufabc.poo_gestao_de_estoque.controle.CrudNewProdutoService;
+import br.com.ufabc.poo_gestao_de_estoque.controle.CrudNewVendaService;
 
 
 
@@ -22,10 +21,17 @@ public class PooGestaoDeEstoqueApplication implements CommandLineRunner{
 	private CrudLoteService loteService;
 	private CrudNewProdutoService npservice;
 	private CrudNewVendaService nvservice;
+	private VisaoProdutos visaoProd;
+	private VisaoLotes visaoLotes;
+	private VisaoVendas visaoVendas;
 	
-	public PooGestaoDeEstoqueApplication( CrudLoteService loteService,
-			CrudNewProdutoService npservice, CrudNewVendaService nvservice) {
+	
+	public PooGestaoDeEstoqueApplication( VisaoVendas visaoVendas,CrudLoteService loteService,
+			CrudNewProdutoService npservice, CrudNewVendaService nvservice, VisaoProdutos visaoProd,VisaoLotes visaoLotes) {
 		super();
+		this.visaoVendas=visaoVendas;
+		this.visaoLotes=visaoLotes;
+		this.visaoProd=visaoProd;
 		this.loteService = loteService;
 		this.npservice = npservice;
 		this.nvservice = nvservice;
@@ -54,13 +60,16 @@ public class PooGestaoDeEstoqueApplication implements CommandLineRunner{
 			
 			switch(opcao) {
 			case 1:
-				this.npservice.menu(scanner);
+				this.visaoProd.menu(scanner);
+				//this.npservice.menu(scanner);
 				break;
 			case 2:
-				this.loteService.menu(scanner);
+				this.visaoLotes.menu(scanner);
+				//this.loteService.menu(scanner);
 				break;
 			case 3:
-				this.nvservice.menu(scanner);
+				this.visaoVendas.menu(scanner);
+				//this.nvservice.menu(scanner);
 				break;
 			default:
 				gatilho=false;

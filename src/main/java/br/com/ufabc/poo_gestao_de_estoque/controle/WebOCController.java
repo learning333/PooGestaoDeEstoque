@@ -1,4 +1,4 @@
-package br.com.ufabc.poo_gestao_de_estoque.controller;
+package br.com.ufabc.poo_gestao_de_estoque.controle;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

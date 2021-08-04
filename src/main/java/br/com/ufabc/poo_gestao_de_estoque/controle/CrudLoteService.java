@@ -1,4 +1,4 @@
-package br.com.ufabc.poo_gestao_de_estoque.servico;
+package br.com.ufabc.poo_gestao_de_estoque.controle;
 
 import java.util.Optional;
 import java.util.Scanner;
@@ -8,10 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import br.com.ufabc.poo_gestao_de_estoque.modelo.Lote;
+import br.com.ufabc.poo_gestao_de_estoque.modelo.LoteRepository;
 import br.com.ufabc.poo_gestao_de_estoque.modelo.NewProduto;
-
-import br.com.ufabc.poo_gestao_de_estoque.repository.LoteRepository;
-import br.com.ufabc.poo_gestao_de_estoque.repository.NewProdutoRepository;
+import br.com.ufabc.poo_gestao_de_estoque.modelo.NewProdutoRepository;
 
 
 
@@ -31,7 +30,7 @@ public class CrudLoteService {
 
 		this.loteRepository = loteRepository;
 		this.newProdutoRepository = newProdutoRepository;
-	}
+	}/*
 	@Transactional
 	public void menu(Scanner scanner) {
 		boolean gatilho=true;
@@ -134,6 +133,36 @@ public class CrudLoteService {
 		}else {
 			System.out.print("ID do lote nao existe");
 		}
+	}*/
+	public Lote adicionarNovo(String referencia, String data,String status,NewProduto produto,int qtd,float precoUn) {
+		Lote novoLote= new Lote(referencia,data,status,produto,qtd,precoUn);
+		this.loteRepository.save(novoLote);
+		return novoLote;
+	}
+	public Iterable<Lote> listarLotes(){
+
+		Iterable<Lote> lista = this.loteRepository.findAll();
+		return lista;
+	}
+	public Optional<Lote> buscaPeloId(Long id){
+		Optional<Lote> optional =this.loteRepository.findById(id);
+		return optional;
+	}
+	public Lote recebeLote(Lote lote) {
+		lote.setStatus("em maos");
+		this.loteRepository.save(lote);
+		return lote;
+	}
+	public Lote reativaLote(Lote lote,int qtd) {
+		lote.setQtdVendida(-qtd);	//qtdVendida+=qtd
+		lote.setStatus("em maos");
+		this.loteRepository.save(lote);
+		return lote;
+	}
+	public Lote encerraLote(Lote lote) {
+		lote.setStatus("encerrado");
+		this.loteRepository.save(lote);
+		return lote;
 	}
 
 }

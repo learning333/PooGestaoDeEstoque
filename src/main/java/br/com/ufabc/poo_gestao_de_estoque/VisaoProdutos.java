@@ -1,25 +1,23 @@
-package br.com.ufabc.poo_gestao_de_estoque.servico;
+package br.com.ufabc.poo_gestao_de_estoque;
 
 import java.util.Scanner;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.ufabc.poo_gestao_de_estoque.controle.CrudNewProdutoService;
+import br.com.ufabc.poo_gestao_de_estoque.modelo.LoteRepository;
 import br.com.ufabc.poo_gestao_de_estoque.modelo.NewProduto;
-import br.com.ufabc.poo_gestao_de_estoque.repository.LoteRepository;
-import br.com.ufabc.poo_gestao_de_estoque.repository.NewProdutoRepository;
-
-
-
+import br.com.ufabc.poo_gestao_de_estoque.modelo.NewProdutoRepository;
 
 @Service
-public class CrudNewProdutoService {
-	private LoteRepository loteRepository;
-	private NewProdutoRepository newprodutoRepository;
+public class VisaoProdutos {
 
-	public CrudNewProdutoService(LoteRepository loteRepository,NewProdutoRepository newprodutoRepository) {
-		this.loteRepository = loteRepository;
-		this.newprodutoRepository= newprodutoRepository;
-	}
+	@Autowired
+	private CrudNewProdutoService crudProduto;
+	
+
+	
 	public void menu(Scanner scanner) {
 		boolean gatilho=true;
 		while(gatilho) {
@@ -51,9 +49,9 @@ public class CrudNewProdutoService {
 		System.out.print("Digite a Descricao: ");
 		String descricao=scanner.next();
 		
-		NewProduto produto=new NewProduto(nome, descricao);
-		newprodutoRepository.save(produto);
-		System.out.print("Salvo\n");
+		NewProduto novo=crudProduto.adicionarNovo(nome,descricao);
+		System.out.println(novo);
+		System.out.print("Salvo!\n");
 
 	}
 	
@@ -61,16 +59,14 @@ public class CrudNewProdutoService {
 	
 	
 	private void visualizar() {
-		System.out.println("----Listando Produtos-----");
-		Iterable<NewProduto> lista = this.newprodutoRepository.findAll();
+		System.out.println("----------Listando Produtos Cadastrados-----------");
+		Iterable<NewProduto> lista = crudProduto.visualizarProdutos();
 		for(NewProduto produto: lista) {
 			
 			System.out.println(produto);
 		}
-		System.out.println("----------FIM-------------");
+		System.out.println("-----------------------Fim------------------------");
 		System.out.println();
 	}
 
-	
-	
 }

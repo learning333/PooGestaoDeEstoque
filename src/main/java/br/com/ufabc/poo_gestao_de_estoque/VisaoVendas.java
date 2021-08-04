@@ -1,32 +1,28 @@
-package br.com.ufabc.poo_gestao_de_estoque.servico;
+package br.com.ufabc.poo_gestao_de_estoque;
 
 import java.util.Optional;
 import java.util.Scanner;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
+import br.com.ufabc.poo_gestao_de_estoque.controle.CrudLoteService;
+import br.com.ufabc.poo_gestao_de_estoque.controle.CrudNewProdutoService;
+import br.com.ufabc.poo_gestao_de_estoque.controle.CrudNewVendaService;
 import br.com.ufabc.poo_gestao_de_estoque.modelo.Lote;
 import br.com.ufabc.poo_gestao_de_estoque.modelo.NewVenda;
 
-import br.com.ufabc.poo_gestao_de_estoque.repository.LoteRepository;
-import br.com.ufabc.poo_gestao_de_estoque.repository.NewVendaRepository;
-
-
-
-
 @Service
-public class CrudNewVendaService {
-
-	private LoteRepository loteRepository;
-	private NewVendaRepository vendaRepository;
+public class VisaoVendas {
 	
-	public CrudNewVendaService(LoteRepository loteRepository, NewVendaRepository vendaRepository) {
-
-		this.loteRepository = loteRepository;
-		this.vendaRepository=vendaRepository;
-	}
+	@Autowired
+	private CrudNewProdutoService crudProduto;
+	@Autowired
+	private CrudLoteService crudLote;
+	@Autowired
+	private CrudNewVendaService crudVenda;
 	
+
 	
 	
 	public void menu(Scanner scanner) {
@@ -50,7 +46,7 @@ public class CrudNewVendaService {
 				this.visualizar();
 				break;
 			case 3:
-				this.estoqueEmMaos();
+				this.visualizarEmMaos();
 				break;
 			case 4:
 				this.devolucao(scanner);
@@ -62,18 +58,22 @@ public class CrudNewVendaService {
 		}
 		System.out.println();
 	}
-	private void cadastrar(Scanner scanner) {
-		Iterable<Lote> lista = this.loteRepository.findAll();
+	private void listarLotesEmMaos() {
+		System.out.println("--------------Listando Lotes Em Maos--------------");
+		Iterable<Lote> lista = this.crudLote.listarLotes();
 		for(Lote lote: lista) {
 			if(lote.getStatus().equals("em maos")){
 				System.out.println(lote.listagemParaVenda());
 			}
 		}
-		System.out.println();
+		System.out.println("-----------------------Fim------------------------");
+	}
+	private void cadastrar(Scanner scanner) {
+		listarLotesEmMaos();
 		System.out.print("Digite o Id do lote de origem do produto a ser vendido: ");
-		Long idprof=scanner.nextLong();
+		Long idlote=scanner.nextLong();
 		
-		Optional<Lote> optional = this.loteRepository.findById(idprof);
+		Optional<Lote> optional = this.crudLote.buscaPeloId(idlote);
 		if(optional.isPresent()) {
 			Lote lote = optional.get();
 			int qtdDisponivel=lote.getQtd()-lote.getQtdVendida();
@@ -107,20 +107,16 @@ public class CrudNewVendaService {
 				String nome=scanner.next();
 				
 				float lucro=(precoVenda-lote.getCusto())*qtd;
-				NewVenda newVenda=new NewVenda(nome,precoVenda,lote,qtd,lucro);
-				newVenda.setStatus("normal");
-				lote.setQtdVendida(lote.getQtdVendida()+qtd);
-				vendaRepository.save(newVenda);
 				
+				NewVenda novaVenda=this.crudVenda.adicionarNovo(nome,precoVenda,lote,qtd,lucro);
 				
-				if(qtdDisponivel-qtd==0) {
-					lote.setStatus("encerrado");//vendeu toda quantidade do lote de compra
+							
+				//lote.setQtdVendida(qtd);//qtdvendida+=qtd
+				if(lote.getQtd()==lote.getQtdVendida()) {
+					this.crudLote.encerraLote(lote);//vendeu toda quantidade do lote de compra
 				}
-				loteRepository.save(lote);//update qtd vendida
+				System.out.println(novaVenda);
 				
-				
-				//LivroCaixa operacaoVenda= new LivroCaixa(lote,"venda",valorTotal);
-				//this.livroCaixaRepository.save(operacaoVenda);
 				System.out.print("Salvo\n");
 			}else {
 				System.out.print("Pedido de compra nao disponivel [status="+lote.getStatus()+"]");
@@ -131,49 +127,52 @@ public class CrudNewVendaService {
 
 	}
 	private void visualizar() {
-		Iterable<NewVenda> lista = this.vendaRepository.findAll();
-		for(NewVenda newVenda: lista) {
-			System.out.println(newVenda);
+		System.out.println("-----------------Listando Vendas------------------");
+
+		Iterable<NewVenda> lista = this.crudVenda.listarVendas();
+		for(NewVenda venda: lista) {
+				System.out.println(venda);
+				System.out.println("\n");
 		}
+		System.out.println("-----------------------Fim------------------------");
 		System.out.println();
 	}
-	private void estoqueEmMaos() {
-		Iterable<Lote> lista = this.loteRepository.findAll();
+	private void visualizarEmMaos() {
+
+		System.out.println("--------------Listando Lotes Em Maos--------------");
+
+		Iterable<Lote> lista = this.crudLote.listarLotes();
 		for(Lote lote: lista) {
 			if(lote.getStatus().equals("em maos")){
 				System.out.println(lote);
+				System.out.println("\n");
 			}
 		}
+		System.out.println("-----------------------Fim------------------------");
 		System.out.println();
+		
 	}
+
 	private void devolucao(Scanner scanner) {
 		
-		Iterable<NewVenda> lista = this.vendaRepository.findAll();
-		for(NewVenda newVenda: lista) {
-			if(newVenda.getStatus().equals("normal")){
-				System.out.println(newVenda);
-				System.out.println();
-			}
-			
-		}
-		System.out.println();
+		visualizar();
 		
 		System.out.print("Digite o id da venda: ");
 		Long id=scanner.nextLong();
-		Optional<NewVenda> optional = this.vendaRepository.findById(id);
+		Optional<NewVenda> optional = this.crudVenda.buscaPeloId(id);
 		if(optional.isPresent()) {
 			NewVenda venda = optional.get();
-			venda.setStatus("devolvido");
-			this.vendaRepository.save(venda);//update
+			
+			venda=this.crudVenda.entradaDevolucao(venda);
 			
 			//devolver quantidade para o lotecompra
 
 			Lote lotecompra=venda.getLote();//optLote.get();
-			lotecompra.setQtdVendida(-venda.getQtd());
+			//lotecompra.setQtdVendida(-venda.getQtd());
 			if(lotecompra.getStatus().equals("encerrado")) {//se estava zerado reativa o lote compra
-				lotecompra.setStatus("em maos");
+				lotecompra=crudLote.reativaLote(lotecompra, -venda.getQtd());
+				
 			}
-			this.loteRepository.save(lotecompra);//update
 			System.out.println("Venda devolvida: ");
 			System.out.println(venda);
 			System.out.println("------------------------------");
@@ -185,6 +184,4 @@ public class CrudNewVendaService {
 			System.out.print("ID do lote nao existe");
 		}
 	}
-
-
 }
