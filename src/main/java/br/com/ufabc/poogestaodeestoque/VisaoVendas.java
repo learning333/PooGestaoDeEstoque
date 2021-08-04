@@ -1,4 +1,4 @@
-package br.com.ufabc.poo_gestao_de_estoque;
+package br.com.ufabc.poogestaodeestoque;
 
 import java.util.Optional;
 import java.util.Scanner;
@@ -6,21 +6,21 @@ import java.util.Scanner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.ufabc.poo_gestao_de_estoque.controle.CrudLoteService;
-import br.com.ufabc.poo_gestao_de_estoque.controle.CrudNewProdutoService;
-import br.com.ufabc.poo_gestao_de_estoque.controle.CrudNewVendaService;
-import br.com.ufabc.poo_gestao_de_estoque.modelo.Lote;
-import br.com.ufabc.poo_gestao_de_estoque.modelo.NewVenda;
+import br.com.ufabc.poogestaodeestoque.controle.CrudLoteCompraService;
+import br.com.ufabc.poogestaodeestoque.controle.CrudProdutoService;
+import br.com.ufabc.poogestaodeestoque.controle.CrudVendaService;
+import br.com.ufabc.poogestaodeestoque.modelo.LoteCompra;
+import br.com.ufabc.poogestaodeestoque.modelo.Venda;
 
 @Service
 public class VisaoVendas {
 	
 	@Autowired
-	private CrudNewProdutoService crudProduto;
+	private CrudProdutoService crudProduto;
 	@Autowired
-	private CrudLoteService crudLote;
+	private CrudLoteCompraService crudLote;
 	@Autowired
-	private CrudNewVendaService crudVenda;
+	private CrudVendaService crudVenda;
 	
 
 	
@@ -60,8 +60,8 @@ public class VisaoVendas {
 	}
 	private void listarLotesEmMaos() {
 		System.out.println("--------------Listando Lotes Em Maos--------------");
-		Iterable<Lote> lista = this.crudLote.listarLotes();
-		for(Lote lote: lista) {
+		Iterable<LoteCompra> lista = this.crudLote.listarLotes();
+		for(LoteCompra lote: lista) {
 			if(lote.getStatus().equals("em maos")){
 				System.out.println(lote.listagemParaVenda());
 			}
@@ -73,9 +73,9 @@ public class VisaoVendas {
 		System.out.print("Digite o Id do lote de origem do produto a ser vendido: ");
 		Long idlote=scanner.nextLong();
 		
-		Optional<Lote> optional = this.crudLote.buscaPeloId(idlote);
+		Optional<LoteCompra> optional = this.crudLote.buscaPeloId(idlote);
 		if(optional.isPresent()) {
-			Lote lote = optional.get();
+			LoteCompra lote = optional.get();
 			int qtdDisponivel=lote.getQtd()-lote.getQtdVendida();
 			if(lote.getStatus().equals("em maos")) {//tem quantidade disponivel>0
 				
@@ -108,7 +108,7 @@ public class VisaoVendas {
 				
 				float lucro=(precoVenda-lote.getCusto())*qtd;
 				
-				NewVenda novaVenda=this.crudVenda.adicionarNovo(nome,precoVenda,lote,qtd,lucro);
+				Venda novaVenda=this.crudVenda.adicionarNovo(nome,precoVenda,lote,qtd,lucro);
 				
 							
 				//lote.setQtdVendida(qtd);//qtdvendida+=qtd
@@ -129,8 +129,8 @@ public class VisaoVendas {
 	private void visualizar() {
 		System.out.println("-----------------Listando Vendas------------------");
 
-		Iterable<NewVenda> lista = this.crudVenda.listarVendas();
-		for(NewVenda venda: lista) {
+		Iterable<Venda> lista = this.crudVenda.listarVendas();
+		for(Venda venda: lista) {
 				System.out.println(venda);
 				System.out.println("\n");
 		}
@@ -141,8 +141,8 @@ public class VisaoVendas {
 
 		System.out.println("--------------Listando Lotes Em Maos--------------");
 
-		Iterable<Lote> lista = this.crudLote.listarLotes();
-		for(Lote lote: lista) {
+		Iterable<LoteCompra> lista = this.crudLote.listarLotes();
+		for(LoteCompra lote: lista) {
 			if(lote.getStatus().equals("em maos")){
 				System.out.println(lote);
 				System.out.println("\n");
@@ -159,15 +159,15 @@ public class VisaoVendas {
 		
 		System.out.print("Digite o id da venda: ");
 		Long id=scanner.nextLong();
-		Optional<NewVenda> optional = this.crudVenda.buscaPeloId(id);
+		Optional<Venda> optional = this.crudVenda.buscaPeloId(id);
 		if(optional.isPresent()) {
-			NewVenda venda = optional.get();
+			Venda venda = optional.get();
 			
 			venda=this.crudVenda.entradaDevolucao(venda);
 			
 			//devolver quantidade para o lotecompra
 
-			Lote lotecompra=venda.getLote();//optLote.get();
+			LoteCompra lotecompra=venda.getLote();//optLote.get();
 			//lotecompra.setQtdVendida(-venda.getQtd());
 			if(lotecompra.getStatus().equals("encerrado")) {//se estava zerado reativa o lote compra
 				lotecompra=crudLote.reativaLote(lotecompra, -venda.getQtd());

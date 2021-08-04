@@ -1,23 +1,23 @@
-package br.com.ufabc.poo_gestao_de_estoque.controle;
+package br.com.ufabc.poogestaodeestoque.controle;
 
 import java.util.Optional;
 import java.util.Scanner;
 
 import org.springframework.stereotype.Service;
 
-import br.com.ufabc.poo_gestao_de_estoque.modelo.LoteRepository;
-import br.com.ufabc.poo_gestao_de_estoque.modelo.NewProduto;
-import br.com.ufabc.poo_gestao_de_estoque.modelo.NewProdutoRepository;
+import br.com.ufabc.poogestaodeestoque.modelo.LoteCompraRepository;
+import br.com.ufabc.poogestaodeestoque.modelo.Produto;
+import br.com.ufabc.poogestaodeestoque.modelo.ProdutoRepository;
 
 
 
 
 @Service
-public class CrudNewProdutoService {
-	private LoteRepository loteRepository;
-	private NewProdutoRepository newprodutoRepository;
+public class CrudProdutoService {
+	private LoteCompraRepository loteRepository;
+	private ProdutoRepository newprodutoRepository;
 
-	public CrudNewProdutoService(LoteRepository loteRepository,NewProdutoRepository newprodutoRepository) {
+	public CrudProdutoService(LoteCompraRepository loteRepository,ProdutoRepository newprodutoRepository) {
 		this.loteRepository = loteRepository;
 		this.newprodutoRepository= newprodutoRepository;
 	}
@@ -73,18 +73,18 @@ public class CrudNewProdutoService {
 		System.out.println();
 	}*/
 	
-	public NewProduto adicionarNovo(String nome, String descricao) {
-		NewProduto produto=new NewProduto(nome, descricao);
+	public Produto adicionarNovo(String nome, String descricao) {
+		Produto produto=new Produto(nome, descricao);
 		newprodutoRepository.save(produto);
 		return produto;
 	}
 	
-	public Iterable<NewProduto> visualizarProdutos(){
-		Iterable<NewProduto> lista = this.newprodutoRepository.findAll();
+	public Iterable<Produto> visualizarProdutos(){
+		Iterable<Produto> lista = this.newprodutoRepository.findAll();
 		return lista;
 	}
-	public Optional<NewProduto> BuscarPeloId(Long id) {
-		Optional<NewProduto> optional =this.newprodutoRepository.findById(id);
+	public Optional<Produto> BuscarPeloId(Long id) {
+		Optional<Produto> optional =this.newprodutoRepository.findById(id);
 		return optional;
 	}
 	

@@ -1,4 +1,4 @@
-package br.com.ufabc.poo_gestao_de_estoque.modelo;
+package br.com.ufabc.poogestaodeestoque.modelo;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="Lote")
-public class Lote {
+public class LoteCompra {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long id;
@@ -35,11 +35,11 @@ public class Lote {
 	//@Fetch(value = FetchMode.SUBSELECT)
 	//FEtch EAGER - traz as materias junto, lazy não
 	//cascade all- quando apaga prof as disciplinas vao junto
-	private List<NewVenda> ListaDeVendas;
+	private List<Venda> ListaDeVendas;
 	
 	@ManyToOne
 	@JoinColumn(name="produto_id",nullable=true)
-	private NewProduto produto;
+	private Produto produto;
 	
 	private int qtd;
 	
@@ -52,9 +52,9 @@ public class Lote {
 	
 	
 	@Deprecated
-	public Lote() {}
+	public LoteCompra() {}
 
-	public Lote(String referencia, String data, String status, NewProduto produto,int qtd, float custo) {
+	public LoteCompra(String referencia, String data, String status, Produto produto,int qtd, float custo) {
 		super();
 		this.referencia = referencia;
 		this.data = data;

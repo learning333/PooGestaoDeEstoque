@@ -1,13 +1,12 @@
-package br.com.ufabc.poo_gestao_de_estoque.modelo;
+package br.com.ufabc.poogestaodeestoque.modelo;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 
 
+
 @Repository
-public interface NewVendaRepository extends CrudRepository<NewVenda, Long> {
+public interface LoteCompraRepository extends CrudRepository<LoteCompra, Long> {
 	
 }
-
-

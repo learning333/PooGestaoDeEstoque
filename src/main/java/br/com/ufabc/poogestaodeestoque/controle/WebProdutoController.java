@@ -1,4 +1,4 @@
-package br.com.ufabc.poo_gestao_de_estoque.controle;
+package br.com.ufabc.poogestaodeestoque.controle;
 
 
 import java.util.Optional;
@@ -10,10 +10,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-
+/**
+ * Comecei a aprender a parte web para tentar fazer um front-end 
+ * porem vi que no ritmo de aprendizado que eu estava tendo nao ia dar tempo de fazer uma entrega
+ * atendendo os criterios/recomendacoes definidos, entao comentei o pouco que tinha conseguido fazer abaixo 
+ * e decidi focar o tempo restante em atender os criterios mesmo sem a persistencia de dados e front web:
+ */
 
 @Controller
 public class WebProdutoController {
+	
+	
 	/*@Autowired//injecao de dependencia
 	private ProdutoRepository pr;
 	
@@ -37,12 +44,6 @@ public class WebProdutoController {
 		return mv;
 	}
 	
-	@RequestMapping("/{id}")
-	public ModelAndView detalhesOrdem(@PathVariable("id") Long id) {
-		Optional<ProdutoCadastrado> produto=pr.findById(id);
-		ModelAndView mv=new ModelAndView("detalhesProduto");
-		mv.addObject("Produto", produto);
-		return mv;
-	}*/
+*/
 	
 }

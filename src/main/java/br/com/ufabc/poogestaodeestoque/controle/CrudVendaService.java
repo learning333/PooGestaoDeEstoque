@@ -1,26 +1,25 @@
-package br.com.ufabc.poo_gestao_de_estoque.controle;
+package br.com.ufabc.poogestaodeestoque.controle;
 
 import java.util.Optional;
 import java.util.Scanner;
 
 import org.springframework.stereotype.Service;
 
-
-import br.com.ufabc.poo_gestao_de_estoque.modelo.Lote;
-import br.com.ufabc.poo_gestao_de_estoque.modelo.LoteRepository;
-import br.com.ufabc.poo_gestao_de_estoque.modelo.NewVenda;
-import br.com.ufabc.poo_gestao_de_estoque.modelo.NewVendaRepository;
+import br.com.ufabc.poogestaodeestoque.modelo.LoteCompra;
+import br.com.ufabc.poogestaodeestoque.modelo.LoteCompraRepository;
+import br.com.ufabc.poogestaodeestoque.modelo.Venda;
+import br.com.ufabc.poogestaodeestoque.modelo.VendaRepository;
 
 
 
 
 @Service
-public class CrudNewVendaService {
+public class CrudVendaService {
 
-	private LoteRepository loteRepository;
-	private NewVendaRepository vendaRepository;
+	private LoteCompraRepository loteRepository;
+	private VendaRepository vendaRepository;
 	
-	public CrudNewVendaService(LoteRepository loteRepository, NewVendaRepository vendaRepository) {
+	public CrudVendaService(LoteCompraRepository loteRepository, VendaRepository vendaRepository) {
 
 		this.loteRepository = loteRepository;
 		this.vendaRepository=vendaRepository;
@@ -62,8 +61,8 @@ public class CrudNewVendaService {
 		System.out.println();
 	}
 	private void cadastrar(Scanner scanner) {
-		Iterable<Lote> lista = this.loteRepository.findAll();
-		for(Lote lote: lista) {
+		Iterable<LoteCompra> lista = this.loteRepository.findAll();
+		for(LoteCompra lote: lista) {
 			if(lote.getStatus().equals("em maos")){
 				System.out.println(lote.listagemParaVenda());
 			}
@@ -72,9 +71,9 @@ public class CrudNewVendaService {
 		System.out.print("Digite o Id do lote de origem do produto a ser vendido: ");
 		Long idprof=scanner.nextLong();
 		
-		Optional<Lote> optional = this.loteRepository.findById(idprof);
+		Optional<LoteCompra> optional = this.loteRepository.findById(idprof);
 		if(optional.isPresent()) {
-			Lote lote = optional.get();
+			LoteCompra lote = optional.get();
 			int qtdDisponivel=lote.getQtd()-lote.getQtdVendida();
 			if(lote.getStatus().equals("em maos")) {//tem quantidade disponivel>0
 				
@@ -106,7 +105,7 @@ public class CrudNewVendaService {
 				String nome=scanner.next();
 				
 				float lucro=(precoVenda-lote.getCusto())*qtd;
-				NewVenda newVenda=new NewVenda(nome,precoVenda,lote,qtd,lucro);
+				Venda newVenda=new Venda(nome,precoVenda,lote,qtd,lucro);
 				newVenda.setStatus("normal");
 				lote.setQtdVendida(lote.getQtdVendida()+qtd);
 				vendaRepository.save(newVenda);
@@ -130,15 +129,15 @@ public class CrudNewVendaService {
 
 	}
 	private void visualizar() {
-		Iterable<NewVenda> lista = this.vendaRepository.findAll();
-		for(NewVenda newVenda: lista) {
+		Iterable<Venda> lista = this.vendaRepository.findAll();
+		for(Venda newVenda: lista) {
 			System.out.println(newVenda);
 		}
 		System.out.println();
 	}
 	private void estoqueEmMaos() {
-		Iterable<Lote> lista = this.loteRepository.findAll();
-		for(Lote lote: lista) {
+		Iterable<LoteCompra> lista = this.loteRepository.findAll();
+		for(LoteCompra lote: lista) {
 			if(lote.getStatus().equals("em maos")){
 				System.out.println(lote);
 			}
@@ -147,8 +146,8 @@ public class CrudNewVendaService {
 	}
 	private void devolucao(Scanner scanner) {
 		
-		Iterable<NewVenda> lista = this.vendaRepository.findAll();
-		for(NewVenda newVenda: lista) {
+		Iterable<Venda> lista = this.vendaRepository.findAll();
+		for(Venda newVenda: lista) {
 			if(newVenda.getStatus().equals("normal")){
 				System.out.println(newVenda);
 				System.out.println();
@@ -159,15 +158,15 @@ public class CrudNewVendaService {
 		
 		System.out.print("Digite o id da venda: ");
 		Long id=scanner.nextLong();
-		Optional<NewVenda> optional = this.vendaRepository.findById(id);
+		Optional<Venda> optional = this.vendaRepository.findById(id);
 		if(optional.isPresent()) {
-			NewVenda venda = optional.get();
+			Venda venda = optional.get();
 			venda.setStatus("devolvido");
 			this.vendaRepository.save(venda);//update
 			
 			//devolver quantidade para o lotecompra
 
-			Lote lotecompra=venda.getLote();//optLote.get();
+			LoteCompra lotecompra=venda.getLote();//optLote.get();
 			lotecompra.setQtdVendida(-venda.getQtd());
 			if(lotecompra.getStatus().equals("encerrado")) {//se estava zerado reativa o lote compra
 				lotecompra.setStatus("em maos");
@@ -185,25 +184,25 @@ public class CrudNewVendaService {
 		}
 	}
 
-	public Optional<NewVenda> buscaPeloId(Long id){
-		Optional<NewVenda> optional =this.vendaRepository.findById(id);
+	public Optional<Venda> buscaPeloId(Long id){
+		Optional<Venda> optional =this.vendaRepository.findById(id);
 		return optional;
 	}
 
-	public NewVenda adicionarNovo(String nome, float precoVenda, Lote lote, int qtd, float lucro) {
-		NewVenda novo=new NewVenda(nome,precoVenda,lote,qtd,lucro);
+	public Venda adicionarNovo(String nome, float precoVenda, LoteCompra lote, int qtd, float lucro) {
+		Venda novo=new Venda(nome,precoVenda,lote,qtd,lucro);
 		lote.setQtdVendida(qtd);
 		this.loteRepository.save(lote);//update qtd vendida
 		novo.setStatus("normal");
 		this.vendaRepository.save(novo);
 		return novo;
 	}
-	public Iterable<NewVenda> listarVendas(){
+	public Iterable<Venda> listarVendas(){
 
-		Iterable<NewVenda> lista = this.vendaRepository.findAll();
+		Iterable<Venda> lista = this.vendaRepository.findAll();
 		return lista;
 	}
-	public NewVenda entradaDevolucao(NewVenda venda) {
+	public Venda entradaDevolucao(Venda venda) {
 		venda.setStatus("devolvido");
 		this.vendaRepository.save(venda);//update
 		return venda;

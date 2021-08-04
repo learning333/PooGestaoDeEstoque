@@ -1,4 +1,4 @@
-package br.com.ufabc.poo_gestao_de_estoque.modelo;
+package br.com.ufabc.poogestaodeestoque.modelo;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="NewProdutos")
-public class NewProduto{// extends EntidadeBase{
+public class Produto{// extends EntidadeBase{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long id;
@@ -25,12 +25,12 @@ public class NewProduto{// extends EntidadeBase{
 	protected String descricao;
 	
 	@OneToMany(mappedBy="produto", fetch=FetchType.EAGER)
-	private List<Lote> lotes;
+	private List<LoteCompra> lotes;
 	
 	@Deprecated
-	public NewProduto() {}
+	public Produto() {}
 	
-	public NewProduto(String nome, String descricao) {
+	public Produto(String nome, String descricao) {
 		super();
 		this.nome=nome;
 		this.descricao=descricao;

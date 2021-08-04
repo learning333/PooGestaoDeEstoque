@@ -1,4 +1,4 @@
-package br.com.ufabc.poo_gestao_de_estoque;
+package br.com.ufabc.poogestaodeestoque;
 
 import java.util.Optional;
 import java.util.Scanner;
@@ -7,19 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.ufabc.poo_gestao_de_estoque.controle.CrudLoteService;
-import br.com.ufabc.poo_gestao_de_estoque.controle.CrudNewProdutoService;
-import br.com.ufabc.poo_gestao_de_estoque.modelo.Lote;
-import br.com.ufabc.poo_gestao_de_estoque.modelo.NewProduto;
+import br.com.ufabc.poogestaodeestoque.controle.CrudLoteCompraService;
+import br.com.ufabc.poogestaodeestoque.controle.CrudProdutoService;
+import br.com.ufabc.poogestaodeestoque.modelo.LoteCompra;
+import br.com.ufabc.poogestaodeestoque.modelo.Produto;
 
 
 @Service
 public class VisaoLotes {
 
 	@Autowired
-	private CrudNewProdutoService crudProduto;
+	private CrudProdutoService crudProduto;
 	@Autowired
-	private CrudLoteService crudLote;
+	private CrudLoteCompraService crudLote;
 	
 	
 	@Transactional
@@ -62,8 +62,8 @@ public class VisaoLotes {
 		
 		//visualizar produtos disponiveis para compra
 		System.out.println("----------Listando Produtos Cadastrados-----------");
-		Iterable<NewProduto> lista = crudProduto.visualizarProdutos();
-		for(NewProduto produto: lista) {
+		Iterable<Produto> lista = crudProduto.visualizarProdutos();
+		for(Produto produto: lista) {
 			
 			System.out.println(produto);
 		}
@@ -74,7 +74,7 @@ public class VisaoLotes {
 		System.out.print("Digite Id do produto:");
 		Long idnewProduto=scanner.nextLong();
 		
-		Optional<NewProduto> optional = this.crudProduto.BuscarPeloId(idnewProduto);
+		Optional<Produto> optional = this.crudProduto.BuscarPeloId(idnewProduto);
 		// produto esta cadastrado?
 		if(optional.isPresent()) {
 			System.out.print("Digite quantidade: ");
@@ -82,9 +82,9 @@ public class VisaoLotes {
 			System.out.print("Digite preco unitario");
 			float precoUn=scanner.nextFloat();
 			float valorTotal=qtd*precoUn;
-			NewProduto newProduto = optional.get();
+			Produto newProduto = optional.get();
 		
-			Lote lote=crudLote.adicionarNovo(referencia, data, "transito", newProduto, qtd, precoUn);
+			LoteCompra lote=crudLote.adicionarNovo(referencia, data, "transito", newProduto, qtd, precoUn);
 
 			System.out.print(lote);
 
@@ -96,8 +96,8 @@ public class VisaoLotes {
 	private void visualizar() {
 		System.out.println("------------Listando Todas as Compras-------------");
 
-		Iterable<Lote> lista = this.crudLote.listarLotes();
-		for(Lote lote: lista) {
+		Iterable<LoteCompra> lista = this.crudLote.listarLotes();
+		for(LoteCompra lote: lista) {
 				System.out.println(lote);
 				System.out.println("\n");
 		}
@@ -107,8 +107,8 @@ public class VisaoLotes {
 	private void visualizarTransito() {
 		System.out.println("-----------Listando Compras Em Transito-----------");
 
-		Iterable<Lote> lista = this.crudLote.listarLotes();
-		for(Lote lote: lista) {
+		Iterable<LoteCompra> lista = this.crudLote.listarLotes();
+		for(LoteCompra lote: lista) {
 			if(lote.getStatus().equals("transito")){
 				System.out.println(lote);
 				System.out.println("\n");
@@ -124,10 +124,10 @@ public class VisaoLotes {
 
 		System.out.print("Digite o id do pedido de compra: ");
 		Long id=scanner.nextLong();
-		Optional<Lote> optional = this.crudLote.buscaPeloId(id);
+		Optional<LoteCompra> optional = this.crudLote.buscaPeloId(id);
 		
 		if(optional.isPresent()) {
-			Lote lote = optional.get();
+			LoteCompra lote = optional.get();
 			lote=this.crudLote.recebeLote(lote);
 			System.out.println(lote);
 			System.out.print("Concluido!\n");

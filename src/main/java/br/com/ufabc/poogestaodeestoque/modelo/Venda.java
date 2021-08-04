@@ -1,4 +1,4 @@
-package br.com.ufabc.poo_gestao_de_estoque.modelo;
+package br.com.ufabc.poogestaodeestoque.modelo;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="NewVendas")
-public class NewVenda {
+public class Venda {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,12 +32,12 @@ public class NewVenda {
 	public float lucro;
 	@ManyToOne
 	@JoinColumn(name="lote_Id",nullable=true)
-	public Lote lote;
+	public LoteCompra lote;
 
 	@Deprecated
-	public NewVenda() {}
+	public Venda() {}
 	
-	public NewVenda(String nomeCliente, float precoVenda, Lote lote, int qtd,float lucro) {
+	public Venda(String nomeCliente, float precoVenda, LoteCompra lote, int qtd,float lucro) {
 		super();
 		this.nomeCliente = nomeCliente;
 		this.precoVenda = precoVenda;
@@ -65,7 +65,7 @@ public class NewVenda {
 				"\n Valor Total: "+qtd*precoVenda +"Lucro: "+lucro;
 	}
 
-	public Lote getLote() {
+	public LoteCompra getLote() {
 		return this.lote;
 	}
 

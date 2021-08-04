@@ -1,4 +1,4 @@
-package br.com.ufabc.poo_gestao_de_estoque.controle;
+package br.com.ufabc.poogestaodeestoque.controle;
 
 import java.util.Optional;
 import java.util.Scanner;
@@ -6,26 +6,25 @@ import java.util.Scanner;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-import br.com.ufabc.poo_gestao_de_estoque.modelo.Lote;
-import br.com.ufabc.poo_gestao_de_estoque.modelo.LoteRepository;
-import br.com.ufabc.poo_gestao_de_estoque.modelo.NewProduto;
-import br.com.ufabc.poo_gestao_de_estoque.modelo.NewProdutoRepository;
+import br.com.ufabc.poogestaodeestoque.modelo.LoteCompra;
+import br.com.ufabc.poogestaodeestoque.modelo.LoteCompraRepository;
+import br.com.ufabc.poogestaodeestoque.modelo.Produto;
+import br.com.ufabc.poogestaodeestoque.modelo.ProdutoRepository;
 
 
 
 
 @Service
-public class CrudLoteService {
+public class CrudLoteCompraService {
 	
-	private LoteRepository loteRepository;
-	private NewProdutoRepository newProdutoRepository;
+	private LoteCompraRepository loteRepository;
+	private ProdutoRepository newProdutoRepository;
 	
 
 	
 	
-	public CrudLoteService( LoteRepository loteRepository,
-			NewProdutoRepository newProdutoRepository) {
+	public CrudLoteCompraService( LoteCompraRepository loteRepository,
+			ProdutoRepository newProdutoRepository) {
 		super();
 
 		this.loteRepository = loteRepository;
@@ -134,32 +133,32 @@ public class CrudLoteService {
 			System.out.print("ID do lote nao existe");
 		}
 	}*/
-	public Lote adicionarNovo(String referencia, String data,String status,NewProduto produto,int qtd,float precoUn) {
-		Lote novoLote= new Lote(referencia,data,status,produto,qtd,precoUn);
+	public LoteCompra adicionarNovo(String referencia, String data,String status,Produto produto,int qtd,float precoUn) {
+		LoteCompra novoLote= new LoteCompra(referencia,data,status,produto,qtd,precoUn);
 		this.loteRepository.save(novoLote);
 		return novoLote;
 	}
-	public Iterable<Lote> listarLotes(){
+	public Iterable<LoteCompra> listarLotes(){
 
-		Iterable<Lote> lista = this.loteRepository.findAll();
+		Iterable<LoteCompra> lista = this.loteRepository.findAll();
 		return lista;
 	}
-	public Optional<Lote> buscaPeloId(Long id){
-		Optional<Lote> optional =this.loteRepository.findById(id);
+	public Optional<LoteCompra> buscaPeloId(Long id){
+		Optional<LoteCompra> optional =this.loteRepository.findById(id);
 		return optional;
 	}
-	public Lote recebeLote(Lote lote) {
+	public LoteCompra recebeLote(LoteCompra lote) {
 		lote.setStatus("em maos");
 		this.loteRepository.save(lote);
 		return lote;
 	}
-	public Lote reativaLote(Lote lote,int qtd) {
+	public LoteCompra reativaLote(LoteCompra lote,int qtd) {
 		lote.setQtdVendida(-qtd);	//qtdVendida+=qtd
 		lote.setStatus("em maos");
 		this.loteRepository.save(lote);
 		return lote;
 	}
-	public Lote encerraLote(Lote lote) {
+	public LoteCompra encerraLote(LoteCompra lote) {
 		lote.setStatus("encerrado");
 		this.loteRepository.save(lote);
 		return lote;

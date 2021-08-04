@@ -1,20 +1,20 @@
-package br.com.ufabc.poo_gestao_de_estoque;
+package br.com.ufabc.poogestaodeestoque;
 
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.ufabc.poo_gestao_de_estoque.controle.CrudNewProdutoService;
-import br.com.ufabc.poo_gestao_de_estoque.modelo.LoteRepository;
-import br.com.ufabc.poo_gestao_de_estoque.modelo.NewProduto;
-import br.com.ufabc.poo_gestao_de_estoque.modelo.NewProdutoRepository;
+import br.com.ufabc.poogestaodeestoque.controle.CrudProdutoService;
+import br.com.ufabc.poogestaodeestoque.modelo.LoteCompraRepository;
+import br.com.ufabc.poogestaodeestoque.modelo.Produto;
+import br.com.ufabc.poogestaodeestoque.modelo.ProdutoRepository;
 
 @Service
 public class VisaoProdutos {
 
 	@Autowired
-	private CrudNewProdutoService crudProduto;
+	private CrudProdutoService crudProduto;
 	
 
 	
@@ -49,7 +49,7 @@ public class VisaoProdutos {
 		System.out.print("Digite a Descricao: ");
 		String descricao=scanner.next();
 		
-		NewProduto novo=crudProduto.adicionarNovo(nome,descricao);
+		Produto novo=crudProduto.adicionarNovo(nome,descricao);
 		System.out.println(novo);
 		System.out.print("Salvo!\n");
 
@@ -60,8 +60,8 @@ public class VisaoProdutos {
 	
 	private void visualizar() {
 		System.out.println("----------Listando Produtos Cadastrados-----------");
-		Iterable<NewProduto> lista = crudProduto.visualizarProdutos();
-		for(NewProduto produto: lista) {
+		Iterable<Produto> lista = crudProduto.visualizarProdutos();
+		for(Produto produto: lista) {
 			
 			System.out.println(produto);
 		}

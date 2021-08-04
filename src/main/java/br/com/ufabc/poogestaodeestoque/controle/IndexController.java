@@ -1,4 +1,4 @@
-package br.com.ufabc.poo_gestao_de_estoque.controle;
+package br.com.ufabc.poogestaodeestoque.controle;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

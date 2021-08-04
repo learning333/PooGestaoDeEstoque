@@ -1,4 +1,4 @@
-package br.com.ufabc.poo_gestao_de_estoque;
+package br.com.ufabc.poogestaodeestoque;
 
 import java.util.Scanner;
 
@@ -6,9 +6,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import br.com.ufabc.poo_gestao_de_estoque.controle.CrudLoteService;
-import br.com.ufabc.poo_gestao_de_estoque.controle.CrudNewProdutoService;
-import br.com.ufabc.poo_gestao_de_estoque.controle.CrudNewVendaService;
+import br.com.ufabc.poogestaodeestoque.controle.CrudLoteCompraService;
+import br.com.ufabc.poogestaodeestoque.controle.CrudProdutoService;
+import br.com.ufabc.poogestaodeestoque.controle.CrudVendaService;
 
 
 
@@ -18,16 +18,16 @@ public class PooGestaoDeEstoqueApplication implements CommandLineRunner{
 
 
 	
-	private CrudLoteService loteService;
-	private CrudNewProdutoService npservice;
-	private CrudNewVendaService nvservice;
+	private CrudLoteCompraService loteService;
+	private CrudProdutoService npservice;
+	private CrudVendaService nvservice;
 	private VisaoProdutos visaoProd;
 	private VisaoLotes visaoLotes;
 	private VisaoVendas visaoVendas;
 	
 	
-	public PooGestaoDeEstoqueApplication( VisaoVendas visaoVendas,CrudLoteService loteService,
-			CrudNewProdutoService npservice, CrudNewVendaService nvservice, VisaoProdutos visaoProd,VisaoLotes visaoLotes) {
+	public PooGestaoDeEstoqueApplication( VisaoVendas visaoVendas,CrudLoteCompraService loteService,
+			CrudProdutoService npservice, CrudVendaService nvservice, VisaoProdutos visaoProd,VisaoLotes visaoLotes) {
 		super();
 		this.visaoVendas=visaoVendas;
 		this.visaoLotes=visaoLotes;
