@@ -53,21 +53,21 @@ public class VisaoLotes {
 		System.out.println();
 	}
 	private void cadastrar(Scanner scanner) {
-
+		System.out.println("-------------Cadastrando nova compra--------------");
 		
 		System.out.print("Digite data");
 		String data=scanner.next();
-		System.out.print("Digite referencia: ");
+		System.out.print("Digite referencia para o pedido: ");
 		String referencia=scanner.next();
 		
 		//visualizar produtos disponiveis para compra
-		System.out.println("----------Listando Produtos Cadastrados-----------");
+		System.out.println("\n-------Listando Produtos Cadastrados--------");
 		Iterable<Produto> lista = crudProduto.visualizarProdutos();
 		for(Produto produto: lista) {
 			
 			System.out.println(produto);
 		}
-		System.out.println("-----------------------Fim------------------------");
+		System.out.println("--------------------Fim---------------------");
 		System.out.println();
 		//fim visualizacao
 		
@@ -85,13 +85,15 @@ public class VisaoLotes {
 			Produto newProduto = optional.get();
 		
 			LoteCompra lote=crudLote.adicionarNovo(referencia, data, "transito", newProduto, qtd, precoUn);
-
+			
+			System.out.println("\nSALVO!\n\n");
 			System.out.print(lote);
 
-			System.out.println("\nSALVO!\n\n");
+			
 		}else {
 			System.out.println("id newProduto não encontrado!\n\n");
 		}
+		System.out.println("--------------------------------------------------");
 	}
 	private void visualizar() {
 		System.out.println("------------Listando Todas as Compras-------------");
@@ -105,7 +107,7 @@ public class VisaoLotes {
 		System.out.println();
 	}
 	private void visualizarTransito() {
-		System.out.println("-----------Listando Compras Em Transito-----------");
+		System.out.println("--------Listando Compras Em Transito--------");
 
 		Iterable<LoteCompra> lista = this.crudLote.listarLotes();
 		for(LoteCompra lote: lista) {
@@ -114,11 +116,12 @@ public class VisaoLotes {
 				System.out.println("\n");
 			}
 		}
-		System.out.println("-----------------------Fim------------------------");
+		System.out.println("--------------------Fim---------------------");
 		System.out.println();
 	}
 	
 	private void recebimento(Scanner scanner) {
+		System.out.println("-------------------Recebimento--------------------");
 		visualizarTransito();
 		
 
@@ -129,11 +132,13 @@ public class VisaoLotes {
 		if(optional.isPresent()) {
 			LoteCompra lote = optional.get();
 			lote=this.crudLote.recebeLote(lote);
+			System.out.print("Recebimento Concluido!\n");
 			System.out.println(lote);
-			System.out.print("Concluido!\n");
+			
 		}else {
 			System.out.print("ID do lote nao existe");
 		}
+		System.out.println("--------------------------------------------------");
 	}
 
 }

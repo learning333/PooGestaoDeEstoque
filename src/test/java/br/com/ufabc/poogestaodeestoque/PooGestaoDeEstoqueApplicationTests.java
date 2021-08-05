@@ -1,4 +1,4 @@
-package br.com.ufabc.poo_gestao_de_estoque;
+package br.com.ufabc.poogestaodeestoque;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

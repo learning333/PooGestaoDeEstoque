@@ -59,18 +59,19 @@ public class VisaoVendas {
 		System.out.println();
 	}
 	private void listarLotesEmMaos() {
-		System.out.println("--------------Listando Lotes Em Maos--------------");
+		System.out.println("-----------Listando Lotes Em Maos-----------");
 		Iterable<LoteCompra> lista = this.crudLote.listarLotes();
 		for(LoteCompra lote: lista) {
 			if(lote.getStatus().equals("em maos")){
 				System.out.println(lote.listagemParaVenda());
 			}
 		}
-		System.out.println("-----------------------Fim------------------------");
+		System.out.println("--------------------Fim---------------------");
 	}
 	private void cadastrar(Scanner scanner) {
+		System.out.println("--------------Cadastrando nova venda--------------");
 		listarLotesEmMaos();
-		System.out.print("Digite o Id do lote de origem do produto a ser vendido: ");
+		System.out.print("Digite o Id do lote: ");
 		Long idlote=scanner.nextLong();
 		
 		Optional<LoteCompra> optional = this.crudLote.buscaPeloId(idlote);
@@ -115,16 +116,17 @@ public class VisaoVendas {
 				if(lote.getQtd()==lote.getQtdVendida()) {
 					this.crudLote.encerraLote(lote);//vendeu toda quantidade do lote de compra
 				}
-				System.out.println(novaVenda);
 				
 				System.out.print("Salvo\n");
+				System.out.println(novaVenda);
+				
 			}else {
-				System.out.print("Pedido de compra nao disponivel [status="+lote.getStatus()+"]");
+				System.out.println("Pedido de compra nao disponivel [status="+lote.getStatus()+"]");
 			}
 		}else {
-			System.out.print("id nao existe");
+			System.out.println("id nao existe");
 		}
-
+		System.out.println("--------------------------------------------------");
 	}
 	private void visualizar() {
 		System.out.println("-----------------Listando Vendas------------------");
@@ -139,7 +141,7 @@ public class VisaoVendas {
 	}
 	private void visualizarEmMaos() {
 
-		System.out.println("--------------Listando Lotes Em Maos--------------");
+		System.out.println("-----------Listando Lotes Em Maos-----------");
 
 		Iterable<LoteCompra> lista = this.crudLote.listarLotes();
 		for(LoteCompra lote: lista) {
@@ -148,13 +150,13 @@ public class VisaoVendas {
 				System.out.println("\n");
 			}
 		}
-		System.out.println("-----------------------Fim------------------------");
+		System.out.println("--------------------Fim---------------------");
 		System.out.println();
 		
 	}
 
 	private void devolucao(Scanner scanner) {
-		
+		System.out.println("-------------Nova devolucao de venda--------------");
 		visualizar();
 		
 		System.out.print("Digite o id da venda: ");
@@ -163,25 +165,24 @@ public class VisaoVendas {
 		if(optional.isPresent()) {
 			Venda venda = optional.get();
 			
-			venda=this.crudVenda.entradaDevolucao(venda);
+			venda=this.crudVenda.entradaDevolucao(venda);//mudar o status da venda para "devolvido"
 			
-			//devolver quantidade para o lotecompra
+			//devolver quantidade para o lotecompra:
 
-			LoteCompra lotecompra=venda.getLote();//optLote.get();
-			//lotecompra.setQtdVendida(-venda.getQtd());
-			if(lotecompra.getStatus().equals("encerrado")) {//se estava zerado reativa o lote compra
-				lotecompra=crudLote.reativaLote(lotecompra, -venda.getQtd());
-				
-			}
+			LoteCompra lotecompra=venda.getLote();
+			lotecompra=this.crudLote.devolucaoDeVenda(lotecompra, venda.getQtd());
+			
+			System.out.print("Concluido!\n");
 			System.out.println("Venda devolvida: ");
 			System.out.println(venda);
 			System.out.println("------------------------------");
 			System.out.println("Item retornado ao estoque: ");
 			System.out.println(lotecompra);
-			System.out.println("------------------------------");
-			System.out.print("Concluido!\n");
+			
+			
 		}else {
 			System.out.print("ID do lote nao existe");
 		}
+		System.out.println("--------------------------------------------------");
 	}
 }

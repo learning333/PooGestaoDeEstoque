@@ -62,7 +62,7 @@ public class Venda {
 	public String toString() {
 		return " ID VENDA: ["+id+"] Cliente=" + nomeCliente + " Status=" + status + 
 				"\n Produto ["+lote.getNomeProduto()+"] Qtd: "+qtd+ " Valor Un: "+precoVenda+
-				"\n Valor Total: "+qtd*precoVenda +"Lucro: "+lucro;
+				"\n Valor Total: "+qtd*precoVenda +" Lucro: "+lucro;
 	}
 
 	public LoteCompra getLote() {

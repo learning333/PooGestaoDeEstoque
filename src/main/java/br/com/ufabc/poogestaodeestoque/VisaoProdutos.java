@@ -43,6 +43,7 @@ public class VisaoProdutos {
 		System.out.println();
 	}
 	private void cadastrar(Scanner scanner) {
+		System.out.println("-------------Cadastrando novo produto-------------");
 		System.out.print("Digite Nome: ");
 		String nome=scanner.next();
 
@@ -50,8 +51,9 @@ public class VisaoProdutos {
 		String descricao=scanner.next();
 		
 		Produto novo=crudProduto.adicionarNovo(nome,descricao);
+		System.out.println("Salvo!\n");
 		System.out.println(novo);
-		System.out.print("Salvo!\n");
+		System.out.println("--------------------------------------------------");
 
 	}
 	
@@ -59,7 +61,7 @@ public class VisaoProdutos {
 	
 	
 	private void visualizar() {
-		System.out.println("----------Listando Produtos Cadastrados-----------");
+		System.out.println("\n----------Listando Produtos Cadastrados-----------");
 		Iterable<Produto> lista = crudProduto.visualizarProdutos();
 		for(Produto produto: lista) {
 			

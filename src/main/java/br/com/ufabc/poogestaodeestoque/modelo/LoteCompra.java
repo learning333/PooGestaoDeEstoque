@@ -88,7 +88,9 @@ public class LoteCompra {
 	}
 
 	public void setQtdVendida(int i) {
+
 		this.qtdVendida+=i;
+
 		
 	}
 

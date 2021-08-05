@@ -54,7 +54,7 @@ public class PooGestaoDeEstoqueApplication implements CommandLineRunner{
 			System.out.println("1-Produtos");
 			System.out.println("2-Compras");
 			System.out.println("3-Vendas");
-			System.out.println("4-Situacional");
+			
 			
 			int opcao=scanner.nextInt();
 			
