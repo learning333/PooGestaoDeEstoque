@@ -1,5 +1,6 @@
 package br.com.ufabc.poogestaodeestoque;
 
+import java.util.InputMismatchException;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -36,7 +37,13 @@ public class VisaoVendas {
 			System.out.println("4-Devolucao");
 
 			
-			int opcao=scanner.nextInt();
+			int opcao=-1;
+			try {
+				opcao=scanner.nextInt();
+			}catch(InputMismatchException e){
+				scanner.nextLine();
+				opcao=-1;
+			}
 			
 			switch(opcao) {
 			case 1:
@@ -58,6 +65,8 @@ public class VisaoVendas {
 		}
 		System.out.println();
 	}
+	
+	
 	private void listarLotesEmMaos() {
 		System.out.println("-----------Listando Lotes Em Maos-----------");
 		Iterable<LoteCompra> lista = this.crudLote.listarLotes();
@@ -68,6 +77,8 @@ public class VisaoVendas {
 		}
 		System.out.println("--------------------Fim---------------------");
 	}
+	
+	
 	private void cadastrar(Scanner scanner) {
 		System.out.println("--------------Cadastrando nova venda--------------");
 		listarLotesEmMaos();
@@ -104,8 +115,9 @@ public class VisaoVendas {
 				float precoVenda=scanner.nextFloat();
 				float valorTotal=qtd*precoVenda;
 				
+				scanner.nextLine();
 				System.out.print("nome cliente: ");
-				String nome=scanner.next();
+				String nome=scanner.nextLine();
 				
 				float lucro=(precoVenda-lote.getCusto())*qtd;
 				
@@ -128,6 +140,9 @@ public class VisaoVendas {
 		}
 		System.out.println("--------------------------------------------------");
 	}
+	
+	
+	
 	private void visualizar() {
 		System.out.println("-----------------Listando Vendas------------------");
 
@@ -139,6 +154,10 @@ public class VisaoVendas {
 		System.out.println("-----------------------Fim------------------------");
 		System.out.println();
 	}
+	
+	
+	
+	
 	private void visualizarEmMaos() {
 
 		System.out.println("-----------Listando Lotes Em Maos-----------");
@@ -155,6 +174,8 @@ public class VisaoVendas {
 		
 	}
 
+	
+	
 	private void devolucao(Scanner scanner) {
 		System.out.println("-------------Nova devolucao de venda--------------");
 		visualizar();
@@ -165,19 +186,27 @@ public class VisaoVendas {
 		if(optional.isPresent()) {
 			Venda venda = optional.get();
 			
-			venda=this.crudVenda.entradaDevolucao(venda);//mudar o status da venda para "devolvido"
 			
-			//devolver quantidade para o lotecompra:
+			try {
+				venda=this.crudVenda.entradaDevolucao(venda);//mudar o status da venda para "devolvido"
+				LoteCompra lotecompra=venda.getLote();
+				lotecompra=this.crudLote.devolucaoDeVenda(lotecompra, venda.getQtd());//devolver quantidade para o lotecompra:
+				System.out.print("Concluido!\n");
+				System.out.println("Venda devolvida: ");
+				System.out.println(venda);
+				System.out.println("------------------------------");
+				System.out.println("Item retornado ao estoque: ");
+				System.out.println(lotecompra);
+			} catch (Exception e) {
+				
+				System.out.print(e);
+			}
+			
+			
 
-			LoteCompra lotecompra=venda.getLote();
-			lotecompra=this.crudLote.devolucaoDeVenda(lotecompra, venda.getQtd());
+
 			
-			System.out.print("Concluido!\n");
-			System.out.println("Venda devolvida: ");
-			System.out.println(venda);
-			System.out.println("------------------------------");
-			System.out.println("Item retornado ao estoque: ");
-			System.out.println(lotecompra);
+
 			
 			
 		}else {

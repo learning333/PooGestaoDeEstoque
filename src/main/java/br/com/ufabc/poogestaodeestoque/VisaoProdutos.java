@@ -1,14 +1,14 @@
 package br.com.ufabc.poogestaodeestoque;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.ufabc.poogestaodeestoque.controle.CrudProdutoService;
-import br.com.ufabc.poogestaodeestoque.modelo.LoteCompraRepository;
+import br.com.ufabc.poogestaodeestoque.controle.ProdutoInvalidoException;
 import br.com.ufabc.poogestaodeestoque.modelo.Produto;
-import br.com.ufabc.poogestaodeestoque.modelo.ProdutoRepository;
 
 @Service
 public class VisaoProdutos {
@@ -26,7 +26,13 @@ public class VisaoProdutos {
 			System.out.println("1-cadastrar novo produto");
 			System.out.println("2-listar produtos");
 			
-			int opcao=scanner.nextInt();
+			int opcao=-1;
+			try {
+				opcao=scanner.nextInt();
+			}catch(InputMismatchException e){
+				scanner.nextLine();
+				opcao=-1;
+			}
 			
 			switch(opcao) {
 			case 1:
@@ -45,14 +51,24 @@ public class VisaoProdutos {
 	private void cadastrar(Scanner scanner) {
 		System.out.println("-------------Cadastrando novo produto-------------");
 		System.out.print("Digite Nome: ");
-		String nome=scanner.next();
-
+		scanner.nextLine();
+		String nome=scanner.nextLine();
+	
+		//scanner.nextLine();
 		System.out.print("Digite a Descricao: ");
-		String descricao=scanner.next();
+		String descricao=scanner.nextLine();
 		
-		Produto novo=crudProduto.adicionarNovo(nome,descricao);
-		System.out.println("Salvo!\n");
-		System.out.println(novo);
+		Produto novo;
+		try {
+			novo=crudProduto.adicionarNovo(nome,descricao);
+			System.out.println("Salvo!\n");
+			System.out.println(novo);
+		} catch (Exception e) {
+
+			System.out.print(e);
+		}
+
+		
 		System.out.println("--------------------------------------------------");
 
 	}
@@ -71,4 +87,6 @@ public class VisaoProdutos {
 		System.out.println();
 	}
 
+
+	
 }

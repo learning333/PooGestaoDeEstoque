@@ -45,10 +45,22 @@ public class CrudVendaService {
 		Iterable<Venda> lista = this.vendaRepository.findAll();
 		return lista;
 	}
-	public Venda entradaDevolucao(Venda venda) {
-		venda.setStatus("devolvido");
-		this.vendaRepository.save(venda);//update
-		return venda;
+	public Venda entradaDevolucao(Venda venda) throws Exception{
+		if(validaDevolucao(venda)){
+			venda.setStatus("devolvido");
+			this.vendaRepository.save(venda);//update
+			return venda;
+		}else {
+			throw new DevolucaoIndisponivelException("impossivel devolver venda com status["+venda.getStatus()+"]\n");
+		}
+	}
+	private boolean validaDevolucao(Venda venda) {
+		if(venda.getStatus().equals("normal")) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 
+	
 }

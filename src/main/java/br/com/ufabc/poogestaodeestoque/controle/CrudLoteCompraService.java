@@ -1,5 +1,6 @@
 package br.com.ufabc.poogestaodeestoque.controle;
 
+import java.util.Date;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -30,7 +31,7 @@ public class CrudLoteCompraService {
 		this.loteRepository = loteRepository;
 		this.newProdutoRepository = newProdutoRepository;
 	}
-	public LoteCompra adicionarNovo(String referencia, String data,String status,Produto produto,int qtd,float precoUn) {
+	public LoteCompra adicionarNovo(String referencia, Date data,String status,Produto produto,int qtd,float precoUn) {
 		LoteCompra novoLote= new LoteCompra(referencia,data,status,produto,qtd,precoUn);
 		this.loteRepository.save(novoLote);
 		return novoLote;
@@ -45,11 +46,29 @@ public class CrudLoteCompraService {
 		return optional;
 	}
 	public LoteCompra recebeLote(LoteCompra lote) {
-		lote.setStatus("em maos");
-		this.loteRepository.save(lote);
+		try {
+			if(validaRecebimento(lote)) {
+				
+				lote.setStatus("em maos");
+				this.loteRepository.save(lote);
+				System.out.print("Recebimento Concluido!\n");
+			}
+		} catch (Exception e) {
+				System.out.print(e);
+		}
+		
 		return lote;
 	}
 	
+	private boolean validaRecebimento(LoteCompra lote) throws Exception {
+		if(lote.getStatus().equals("transito")) {
+			
+			return true;
+		}else {
+			throw new RecebimentoIndisponivelException("impossivel receber lote com status["+lote.getStatus()+"]\n");
+		}
+		
+	}
 	public LoteCompra devolucaoDeVenda(LoteCompra lote, int qtd) {
 
 		lote.setQtdVendida(qtd*(-1));
@@ -70,6 +89,51 @@ public class CrudLoteCompraService {
 		lote.setStatus("encerrado");
 		this.loteRepository.save(lote);
 		return lote;
+	}
+	public Long InputId(Scanner scanner) {
+		Long result;
+		while (true) {
+	       
+	        try {
+	            result=scanner.nextLong();
+	            return result;
+	        }
+	        catch (java.util.InputMismatchException e) {
+	            scanner.nextLine();
+	            System.out.println("Valor digitado nao é um indice valido, tente novamente: ");
+	        }
+	    }
+				
+	}
+	public int InputQtdProduto(Scanner scanner) {
+		int result;
+		while (true) {
+	       
+	        try {
+	            result=scanner.nextInt();
+	            return result;
+	        }
+	        catch (java.util.InputMismatchException e) {
+	            scanner.nextLine();
+	            System.out.println("Valor invalido, digite Quantidade: ");
+	        }
+	    }
+				
+	}
+	public float InputValorProduto(Scanner scanner) {
+		float result;
+		while (true) {
+	       
+	        try {
+	            result=scanner.nextFloat();
+	            return result;
+	        }
+	        catch (java.util.InputMismatchException e) {
+	            scanner.nextLine();
+	            System.out.println("Valor invalido, digite Preco: ");
+	        }
+	    }
+				
 	}
 
 }

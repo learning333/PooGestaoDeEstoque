@@ -1,5 +1,6 @@
 package br.com.ufabc.poogestaodeestoque.controle;
 
+import java.util.InputMismatchException;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -23,10 +24,14 @@ public class CrudProdutoService {
 	}
 	
 	
-	public Produto adicionarNovo(String nome, String descricao) {
-		Produto produto=new Produto(nome, descricao);
-		newprodutoRepository.save(produto);
-		return produto;
+	public Produto adicionarNovo(String nome, String descricao) throws Exception {
+		if(nome.length()>0 && descricao.length()>0) {
+			Produto produto=new Produto(nome, descricao);
+			newprodutoRepository.save(produto);
+			return produto;
+		}else {
+			throw new ProdutoInvalidoException("Nome e descricao nao podem ser nulos");
+		}
 	}
 	
 	public Iterable<Produto> visualizarProdutos(){
@@ -38,5 +43,7 @@ public class CrudProdutoService {
 		return optional;
 	}
 	
+	
+
 	
 }

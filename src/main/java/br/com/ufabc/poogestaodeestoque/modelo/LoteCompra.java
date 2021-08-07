@@ -1,5 +1,6 @@
 package br.com.ufabc.poogestaodeestoque.modelo;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -26,7 +27,7 @@ public class LoteCompra {
 	
 	//public NewProduto produto;
 	
-	public String data;
+	public Date data;
 	
 	public String status;
 	
@@ -54,7 +55,7 @@ public class LoteCompra {
 	@Deprecated
 	public LoteCompra() {}
 
-	public LoteCompra(String referencia, String data, String status, Produto produto,int qtd, float custo) {
+	public LoteCompra(String referencia, Date data, String status, Produto produto,int qtd, float custo) {
 		super();
 		this.referencia = referencia;
 		this.data = data;
