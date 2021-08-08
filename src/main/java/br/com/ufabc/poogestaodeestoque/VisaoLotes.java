@@ -67,7 +67,7 @@ public class VisaoLotes {
 		
 		System.out.print("Digite data: [dd-mm-aa]");
 
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-mm-yy");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yy");
 		Date data=null;
 		try {
 			data=dateFormat.parse(scanner.next());

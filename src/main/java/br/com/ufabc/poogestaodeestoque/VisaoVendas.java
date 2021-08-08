@@ -83,7 +83,7 @@ public class VisaoVendas {
 		System.out.println("--------------Cadastrando nova venda--------------");
 		listarLotesEmMaos();
 		System.out.print("Digite o Id do lote: ");
-		Long idlote=scanner.nextLong();
+		Long idlote=this.crudLote.InputId(scanner);
 		
 		Optional<LoteCompra> optional = this.crudLote.buscaPeloId(idlote);
 		if(optional.isPresent()) {
@@ -95,15 +95,15 @@ public class VisaoVendas {
 				System.out.println("Quantidade Disponivel:["+qtdDisponivel+"]");
 
 				System.out.print("Qtd vendida:");
-				int qtd=scanner.nextInt();
+				int qtd=this.crudLote.InputQtdProduto(scanner);//valida que o user vai entrar um int
 				
-				
+				//validacao se qtd esta disponivel pra venda:
 				boolean filtro=true;
 				while(filtro) {
 					if(qtd>qtdDisponivel) {
 						System.out.print("Quantidade inserida ["+qtd+"] maior do que quantidade disponivel ["+qtdDisponivel+"]" );
 						System.out.print( "\nDigite um valor valido: ");
-						qtd=scanner.nextInt();
+						qtd=this.crudLote.InputQtdProduto(scanner);
 					}else {//digitou quantidade valida
 
 						filtro=false;
@@ -112,7 +112,7 @@ public class VisaoVendas {
 
 				
 				System.out.print("Preco unitario:");
-				float precoVenda=scanner.nextFloat();
+				float precoVenda=this.crudLote.InputValorProduto(scanner);//valida que user vai entrar float
 				float valorTotal=qtd*precoVenda;
 				
 				scanner.nextLine();
@@ -181,7 +181,7 @@ public class VisaoVendas {
 		visualizar();
 		
 		System.out.print("Digite o id da venda: ");
-		Long id=scanner.nextLong();
+		Long id=this.crudLote.InputId(scanner);
 		Optional<Venda> optional = this.crudVenda.buscaPeloId(id);
 		if(optional.isPresent()) {
 			Venda venda = optional.get();
