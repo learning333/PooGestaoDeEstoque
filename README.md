@@ -1,28 +1,28 @@
 # PooGestaoDeEstoque
-projeto para a disciplina de POO
+Projeto para a disciplina de POO
 
 Versao extra(sem persistencia de dados porem com mais implementacoes do conteudo dado durante o quadrimestre) disponivel em https://github.com/learning333/poogestaodeestoqueextra
 
 
 
-Rodando localmente:
+# Rodando localmente:
 
   Atraves do maven via 
   ./mvnw spring-boot:run
 
   É possivel acessar o prototipo do formulario web de cadastro de produto via http://localhost:8080/. A Parte web não foi implementada alem desse formulario.
   
-Uso do programa:
+# Uso do programa:
   O uso do programa se da via linha de comando atraves dos menus de produto, compras e vendas.
   
-  Existem 3 entidades no programa:
-    Produto: entidade basica, deve ser cadastrado antes de qualquer operacao de compra ou venda
+  ## Existem 3 entidades no programa:
+   #### Produto: entidade basica, deve ser cadastrado antes de qualquer operacao de compra ou venda
     
-    LoteCompra: Pedido de compra de um unico produto com quantidade e preco unitario variavel. Deve ter o recebimento confirmado antes de ficar disponivel para o menu de vendas
+   #### LoteCompra: Pedido de compra de um unico produto com quantidade e preco unitario variavel. Deve ter o recebimento confirmado antes de ficar disponivel para o menu de vendas
     
-    Venda:Venda de um unico produto limitado a quantidade disponivel no lote de origem do mesmo. Pode ser devolvida retornando a quantidade do item para o estoque.
+   #### Venda:Venda de um unico produto limitado a quantidade disponivel no lote de origem do mesmo. Pode ser devolvida retornando a quantidade do item para o estoque.
   
- Exemplo de uso:
+ # Exemplo de uso:
     Menu 1-1 Cadastrar Produto
       Para cadastrar um produto digita se o nome e descricao, ex: "caneta azul" , "caneta esferografica com tampa".
       
@@ -41,7 +41,7 @@ Uso do programa:
  
      As outras funcoes nao citadas servem para visualizacao dos produtos, lotes e vendas.
  
- Licença 
+ # Licença 
   
   PooGestaoDeEstoque is licensed under the MIT License.
   
