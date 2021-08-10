@@ -10,7 +10,7 @@ Versao extra(sem persistencia de dados porem com mais implementacoes do conteudo
   Atraves do maven via 
   ./mvnw spring-boot:run
 
-  É possivel acessar o prototipo do formulario web de cadastro de produto via http://localhost:8080/. A Parte web não foi implementada alem desse formulario.
+ 
   
 # Uso do programa:
   O uso do programa se da via linha de comando atraves dos menus de produto, compras e vendas.
