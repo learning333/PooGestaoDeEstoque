@@ -20,8 +20,8 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class WebProdutoController {
 	
-	
-	/*@Autowired//injecao de dependencia
+	/*
+	@Autowired//injecao de dependencia
 	private ProdutoRepository pr;
 	
 	@RequestMapping(value="/cadastrarProduto", method=RequestMethod.GET)
@@ -43,7 +43,7 @@ public class WebProdutoController {
 		mv.addObject("produtosCadastrados", produtos);
 		return mv;
 	}
-	
-*/
+	*/
+
 	
 }
